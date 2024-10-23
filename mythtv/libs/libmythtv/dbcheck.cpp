@@ -4072,7 +4072,6 @@ static bool doUpgradeTVDatabaseSchema(void)
         if (!performActualUpdate("MythTV", "DBSchemaVer",
                                  updates, "1381", dbver))
             return false;
-
     }
 
     return true;
