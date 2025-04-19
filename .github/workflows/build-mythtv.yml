@@ -46,11 +46,9 @@ on:                # yamllint disable-line rule:truthy
 
   push:
     branches:
-      - 'master'
 
   pull_request:
     branches:
-      - 'master'
 
   workflow_dispatch:
 
@@ -204,6 +202,38 @@ jobs:
             core_build_cmd: 'cmake --build build-qt5'
             core_install_cmd: ''
             core_test_cmd: 'cmake --build build-qt5 -t MythTV-tests'
+            plugins_working_subdirectory: ''
+            plugins_configure_cmd: ''
+            plugins_build_cmd: ''
+            plugins_install_cmd: ''
+          - desc: 'Fedora - CMake Qt6'
+            runs_on: 'ubuntu-latest'
+            image: 'quay.io/fedora/fedora:latest'
+            update_cmd: 'dnf upgrade -y'
+            install_ansible_cmd: 'dnf install ansible dnf-plugins-core -y'
+            ansible_cmd: 'ansible-playbook --limit localhost -e "qt6=true" mythtv.yml'
+            install_extra_pkgs_cmd: 'dnf install ant -y'
+            core_working_subdirectory: ''
+            core_configure_cmd: 'cmake --preset qt6 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/build/install'
+            core_build_cmd: 'cmake --build build-qt6'
+            core_install_cmd: ''
+            core_test_cmd: 'cmake --build build-qt6 -t MythTV-tests'
+            plugins_working_subdirectory: ''
+            plugins_configure_cmd: ''
+            plugins_build_cmd: ''
+            plugins_install_cmd: ''
+          - desc: 'Fedora - CMake Qt6 aarch64'
+            runs_on: 'ubuntu-24.04-arm'
+            image: 'quay.io/fedora/fedora:latest'
+            update_cmd: 'dnf upgrade -y'
+            install_ansible_cmd: 'dnf install ansible dnf-plugins-core -y'
+            ansible_cmd: 'ansible-playbook --limit localhost -e "qt6=true" mythtv.yml'
+            install_extra_pkgs_cmd: 'dnf install ant -y'
+            core_working_subdirectory: ''
+            core_configure_cmd: 'cmake --preset qt6 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/build/install'
+            core_build_cmd: 'cmake --build build-qt6'
+            core_install_cmd: ''
+            core_test_cmd: 'cmake --build build-qt6 -t MythTV-tests'
             plugins_working_subdirectory: ''
             plugins_configure_cmd: ''
             plugins_build_cmd: ''
