@@ -46,9 +46,11 @@ on:                # yamllint disable-line rule:truthy
 
   push:
     branches:
+      - 'workflow'
 
   pull_request:
     branches:
+      - 'workflow'
 
   workflow_dispatch:
 
