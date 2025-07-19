@@ -120,6 +120,7 @@
             "new_search": "Yeni Başlıklar",
             "people_search": "İnsan arama",
             "retgrid": "Izgara Görünümüne Dön",
+            "subtitle_search": "Altyazılı arama",
             "title_search": "Başlık arama",
             "typecolors": "Kategori Tip Renkler"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Meta Verileri Güncelle",
             "mnu_updaterecgrp": "Kayıt Grubunu Değiştir",
             "mnu_updaterecrule": "Kayıt Kuralını Güncelle",
+            "never_rec": "Asla Kayıt",
             "nonrerec": "Hasarlı programın yeniden kaydedilmesine izin vermek için lütfen Yeniden Kayda İzin Ver seçeneğini kullanın.",
             "normal_rec": "Normal kayıt",
             "orig_airdate": "Orijinal Yayın Tarihi",
@@ -317,6 +319,7 @@
             "inetref_desc": "Kayıt meta verilerini aramak için TheTVDB, TVmaze veya TMDB'yi kullanın. Yukarıda bir radyo düğmesi seçin ve web sitesinde arama yapmak için bağlantıyı kullanın. Web sayfasında doğru diziyi bulduğunuzda, onu seçin ve URL'den veya thetvdb.com olması durumunda web sayfasından sayısal kimliği kopyalayın. Bunu xxxx.py_ önekinden hemen sonra giriş kutusuna girin.",
             "inetref_label": "Meta Veri Arama Kimliği (InetRef)",
             "input_any": "Herhangi Bir Giriş",
+            "invalid_never": "Asla kayıt burada geçerli değil",
             "isearch": "Aramak",
             "maxeps_label": "Saklanacak Maksimum Bölüm Sayısı",
             "maxnewest_desc": "İşaretlenmemişse, maksimum bölüme ulaşıldığında kaydı durdurun.",
@@ -426,8 +429,27 @@
             "status": "Durum",
             "time": "Zaman"
         },
+        "users": {
+            "auth_all_desc": "Tüm IP adresleri için gerekli kimlik doğrulama",
+            "auth_desc": "Bu, oturum açmayan bir kullanıcının API çağrılarına ve web uygulama sayfalarına erişip erişemeyeceğini denetler. Bu yalnızca yönetici olarak oturum açarken ayarlanabilir. Uzak IP adresleri seçeneği yalnızca 'Tüm Alt Ağlardan Bağlantılara İzin Ver' seçeneği arka uç kurulumunda seçilirse seçilebilir, çünkü arka uç kurulumunda bu seçenek olmadan uzak kullanıcılar sisteme erişemez. Seçim derhal güncellenir, kaydetme gerekmez. Kimlik doğrulaması gerekmese bile, bir kullanıcının yine de giriş yapabileceğini ve seçmesi durumunda kimlik doğrulaması yapabileceğini unutmayın.",
+            "auth_label": "API kimlik doğrulaması gerekli",
+            "auth_none_desc": "Kimlik doğrulama gerekmez",
+            "auth_remote_desc": "Uzak IP adresleri için gerekli kimlik doğrulama",
+            "auth_title": "Kimlik Doğrulamayı Etkinleştir veya Devre Dışı Bırak",
+            "authreq_fail": "Hata: Bu değeri ayarlanamıyor.",
+            "delete_details": "Bu {{ Name }} kullanıcısını silecektir.",
+            "delete_label": "Kullanıcıyı sil",
+            "edit_label": "Kullanıcıyı güncelle",
+            "heading": "Kullanıcılar",
+            "name_label": "Kullanıcı adı",
+            "new": "Yeni Kullanıcı",
+            "oldpwwrong": "Mevcut şifre yanlış.",
+            "pwdiffer": "Şifreler farklı"
+        },
         "videos": {
             "adddate": "Tarih eklendi",
+            "allCategories": "Tüm kategoriler",
+            "category": "Kategori",
             "download": "Video indir",
             "heading": "videolar",
             "releasedate": "Yayın tarihi",
@@ -471,13 +493,24 @@
         "changeLanguage": "Dili değiştir",
         "dashboard": "Gösterge Paneli",
         "hide": "Üst Banner'ı gizle",
+        "keep_pwd_warn": "UYARI: \"Oturum Açılmış Kalın\" Şifreyi Tarayıcı Yerel Deposunda Temizle Metin'de saklayacaktır.",
+        "keeplogin": "Bu bilgisayarda oturum açın.",
         "login": "Giriş yapmak",
+        "loginfail": "Giriş başarısız oldu",
+        "logout": "Çıkış yapmak",
         "mainheading": "MythTV Arka Ucu",
         "show": "Üst Banner'ı göster",
         "switchServer": "Sunucu Değiştir",
         "switchTheme": "Temayı Değiştir",
         "testbed": "Test ortamı",
-        "tvGuide": "TV Rehberi"
+        "tvGuide": "TV Rehberi",
+        "username": "Kullanıcı adı",
+        "userpassword": "Şifre",
+        "users": {
+            "new_password": "Yeni Şifre",
+            "new_password2": "Yine yeni şifre",
+            "old_password": "Mevcut Şifre"
+        }
     },
     "primeng": {
         "accept": "Evet",
@@ -1084,8 +1117,18 @@
             "title": "EIT Tarayıcı Seçenekleri"
         },
         "epgdownload": {
+            "args_desc": "İstediğiniz argümanlar Rehber veri programına geçti.",
+            "args_label": "Veri argümanlarına rehberlik edin",
             "enabled_desc": "Etkinleştirilirse, rehber veri programı otomatik olarak çalıştırılacaktır.",
             "enabled_label": "Program listelerini otomatik olarak güncelle",
+            "maxhr_desc": "Bu ayar ve bir önceki ayar, Kılavuz Veri Programının çalışmasına izin verildiği bir zaman periyodu tanımlar. Örneğin, başlama 11'e başlama ve 13'e kadar biter, programın sadece 11:00 ile 13:59 arasında çalışacağı anlamına gelir.",
+            "maxhr_label": "Kılavuz Veri Programı Yürütme Sonu",
+            "minhr_desc": "Bu ayar ve aşağıdakiler, Kılavuz Veri Programının çalışmasına izin verildiği bir zaman periyodu tanımlar. Örneğin, başlama 11'e başlama ve 13'e kadar biter, programın sadece 11:00 ile 13:59 arasında çalışacağı anlamına gelir.",
+            "minhr_label": "Kılavuz Veri Programı Yürütme Başlangıç",
+            "path_desc": "'MythFillDatabase' veya tüm video kaynaklarınız için program kılavuzu bilgilerini dolduracak özel bir komut dosyasının adını kullanın.",
+            "path_label": "Kılavuz Veri Programı",
+            "suggest_desc": "Etkinleştirilirse, bir kılavuz veri sağlayıcısının sunucularına yükü dağıtmak için bir sonraki indirme süresini belirtmesine izin verin. Kılavuz Veri Programı Yürütme Başlangıç/Bitiş süreleri de göz ardı edilir.",
+            "suggest_label": "Grabber tarafından önerilen zamanda Kılavuz Veri Programını Çalıştırın",
             "title": "Program Takvimi İndirme Seçenekleri"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "'{{Name}}' veritabanına sahip olun",
             "havenotdb": "'{{Name}}' veritabanına sahip değil",
-            "schemaver": "Veritabanı şeması sürümü: {{SchemaVersion}}"
+            "schemaver": "Veritabanı şeması sürümü: {{SchemaVersion}}",
+            "servertype_head": "SQL Server Türü:"
         },
         "done": "Tamamlamak",
         "enterDBLoginDetails": "Veritabanı oturum açma ayrıntılarını girin",

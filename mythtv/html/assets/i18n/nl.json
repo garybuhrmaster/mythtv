@@ -120,6 +120,7 @@
             "new_search": "Nieuwe titels",
             "people_search": "Mensen zoeken",
             "retgrid": "Keer terug naar rasterweergave",
+            "subtitle_search": "Ondertitel zoeken",
             "title_search": "Titel zoeken",
             "typecolors": "Categorie Type Kleuren"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Metagegevens bijwerken",
             "mnu_updaterecgrp": "Wijzig de opnamegroep",
             "mnu_updaterecrule": "Recordregel bijwerken",
+            "never_rec": "Nooit opnemen",
             "nonrerec": "Om het opnieuw opnemen van het beschadigde programma mogelijk te maken, gebruikt u Toestaan ​​opnieuw opnemen.",
             "normal_rec": "Normale opname",
             "orig_airdate": "Originele uitzenddatum",
@@ -317,6 +319,7 @@
             "inetref_desc": "Gebruik TheTVDB, TVmaze of TMDB om opnamemetadata op te zoeken. Selecteer hierboven een keuzerondje en gebruik de link om op de website te zoeken. Zodra u de juiste serie op de webpagina hebt gevonden, selecteert u deze en kopieert u de numerieke id van de URL, of van de webpagina in het geval van thetvdb.com. Voer dat in het invoervak ​​in direct na het voorvoegsel xxxx.py_",
             "inetref_label": "Id voor opzoeken van metagegevens (InetRef)",
             "input_any": "Elke invoer",
+            "invalid_never": "Never Record is hier niet geldig",
             "isearch": "Zoekopdracht",
             "maxeps_label": "Maximaal aantal te behouden afleveringen",
             "maxnewest_desc": "Indien niet aangevinkt, stop dan met opnemen wanneer het maximale aantal afleveringen is bereikt.",
@@ -426,8 +429,27 @@
             "status": "Toestand",
             "time": "Tijd"
         },
+        "users": {
+            "auth_all_desc": "Verificatie vereist voor alle IP -adressen",
+            "auth_desc": "Dit bepaalt of een gebruiker die zich niet heeft aangemeld, toegang heeft tot de API -oproepen en web -app -pagina's. Dit kan alleen worden ingesteld terwijl u wordt aangemeld als admin. De optie voor externe IP -adressen kan alleen worden geselecteerd als de optie 'Verbindingen toestaan ​​van alle subnetten' is geselecteerd in backend -installatie, omdat zonder die optie in de backend -installatie geen externe gebruikers geen toegang hebben tot het systeem. De selectie wordt onmiddellijk bijgewerkt, er is geen opslag vereist. Merk op dat zelfs als er geen authenticatie vereist is, een gebruiker nog steeds kan inloggen en worden geverifieerd als hij kiest.",
+            "auth_label": "API -authenticatie vereist",
+            "auth_none_desc": "Geen authenticatie vereist",
+            "auth_remote_desc": "Verificatie vereist voor externe IP -adressen",
+            "auth_title": "Authenticatie inschakelen of uitschakelen",
+            "authreq_fail": "Fout: kan deze waarde niet instellen.",
+            "delete_details": "Hiermee worden de gebruiker {{ Name }} verwijderd.",
+            "delete_label": "Verwijder de gebruiker",
+            "edit_label": "Update User",
+            "heading": "Gebruikers",
+            "name_label": "Gebruikersnaam",
+            "new": "Nieuwe gebruiker",
+            "oldpwwrong": "Het huidige wachtwoord is onjuist.",
+            "pwdiffer": "Wachtwoorden verschillen"
+        },
         "videos": {
             "adddate": "Datum toegevoegd",
+            "allCategories": "Alle categorieën",
+            "category": "Categorie",
             "download": "Download video",
             "heading": "Videos",
             "releasedate": "Datum van publicatie",
@@ -471,13 +493,24 @@
         "changeLanguage": "Taal wijzigen",
         "dashboard": "Dashboard",
         "hide": "Verberg de bovenste banner",
+        "keep_pwd_warn": "WAARSCHUWING: \"Blijf ingelogd\" zal het wachtwoord opslaan in duidelijke tekst in de lokale opslag van de browser.",
+        "keeplogin": "Blijf ingelogd op deze computer.",
         "login": "Log in",
+        "loginfail": "Inloggen mislukt",
+        "logout": "Uitloggen",
         "mainheading": "MythTV-backend",
         "show": "Topbanner weergeven",
         "switchServer": "Wissel van server",
         "switchTheme": "Wissel van thema",
         "testbed": "Proefbank",
-        "tvGuide": "tv-gids"
+        "tvGuide": "tv-gids",
+        "username": "Gebruikersnaam",
+        "userpassword": "Wachtwoord",
+        "users": {
+            "new_password": "Nieuw wachtwoord",
+            "new_password2": "Nieuw wachtwoord opnieuw",
+            "old_password": "Huidig ​​wachtwoord"
+        }
     },
     "primeng": {
         "accept": "Ja",
@@ -1084,8 +1117,18 @@
             "title": "EIT-scanneropties"
         },
         "epgdownload": {
+            "args_desc": "Alle argumenten die u wilt doorgeven aan het Guide Data Program.",
+            "args_label": "Begeleiden gegevensargumenten",
             "enabled_desc": "Indien ingeschakeld, wordt het gidsgegevensprogramma automatisch uitgevoerd.",
             "enabled_label": "Programmalijsten automatisch bijwerken",
+            "maxhr_desc": "Deze instelling en de voorgaande definiëren een tijdsperiode waarin het Guide Data -programma mag worden uitgevoerd. Het instellen van starten tot 11 en eindigen tot 13 zou betekenen dat het programma slechts tussen 11:00 en 13:59 zou lopen.",
+            "maxhr_label": "Uitvoering van het gegevensprogramma -uitvoering van het gegevensprogramma",
+            "minhr_desc": "Deze instelling en de volgende definiëren een tijdsperiode waarin het Guide Data -programma mag worden uitgevoerd. Het instellen van starten tot 11 en eindigen tot 13 zou betekenen dat het programma slechts tussen 11:00 en 13:59 zou lopen.",
+            "minhr_label": "Guide Data Program Uitvoering Start",
+            "path_desc": "Gebruik 'mythfillDatabase' of de naam van een aangepast script dat de info van de programmagids voor al uw video -bronnen zal vullen.",
+            "path_label": "Gids data -programma",
+            "suggest_desc": "Indien ingeschakeld, sta een gidsgegevensprovider toe om de volgende downloadtijd op te geven om de load over hun servers te verspreiden. Guide Data Program Uitvoering Start/eindtijden worden ook genegeerd.",
+            "suggest_label": "Voer Guide Data Program op tijdstip voorgesteld door de Grabber",
             "title": "Programmaschema Downloadopties"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "Heb '{{Name}}'-database",
             "havenotdb": "Heb geen '{{Name}}'-database",
-            "schemaver": "Databaseschemaversie is {{SchemaVersion}}"
+            "schemaver": "Databaseschemaversie is {{SchemaVersion}}",
+            "servertype_head": "SQL Server Type:"
         },
         "done": "Klaar",
         "enterDBLoginDetails": "Voer de inloggegevens van de database in",

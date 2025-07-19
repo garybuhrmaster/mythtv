@@ -104,12 +104,13 @@ list(REMOVE_DUPLICATES CMAKE_FIND_ROOT_PATH)
 #
 if(MACPORTS)
   set(PKGMGR_PREFIX "${MACPORTS_PREFIX}")
+  set(PKGMGR_LIB_DIR "${MACPORTS_PREFIX}/lib")
   set(FONT_PATH "${MACPORTS_PREFIX}/share/fonts")
 elseif(HOMEBREW)
   set(PKGMGR_PREFIX "${HOMEBREW_PREFIX}")
+  set(PKGMGR_LIB_DIR "${HOMEBREW_PREFIX}/lib")
   set(FONT_PATH "$ENV{HOME}/Library/fonts")
 endif()
-set(PKGMGR_LIB_DIR "${MACPORTS_PREFIX}/lib")
 
 #
 # Shorthand
@@ -127,7 +128,18 @@ set(FMWK_DIR ${CONTENTS_DIR}/Frameworks)
 set(PLUGINS_DIR ${CONTENTS_DIR}/PlugIns)
 set(PLIST_FILE ${CONTENTS_DIR}/Info.plist)
 
-#
+# qt 6.9.0 on homebrew moved the plugins and qml directories
+# into share.  This might also occur in macports later so
+# add logic to detect the move
+set(QT_PLUGINS_DIR "${_QT_BASE}/plugins/")
+if(NOT EXISTS "${QT_PLUGINS_DIR}")
+  set(QT_PLUGINS_DIR "${_QT_BASE}/share/qt/plugins/")
+endif()
+set(QT_QML_DIR "${_QT_BASE}/qml/")
+if(NOT EXISTS "${QT_QML_DIR}")
+  set(QT_QML_DIR "${_QT_BASE}/share/qt/qml/")
+endif()
+
 # Locate Python for embedding the correct version from build time
 #
 message(STATUS "Setting up Python environment and variables")
@@ -252,10 +264,10 @@ endforeach()
 function(find_libraries_pathnames EXES_IN PATHS_OUT MISSING_OUT)
   # Possible locations for additional libraries.
   set(SRCHDIRS
-      ${MYTHTV_INSTALL_PREFIX}/bin
-      ${MYTHTV_INSTALL_PREFIX}/lib
-      ${MYTHTV_INSTALL_PREFIX}/lib/mythtv/plugins
-      ${LIBS_INSTALL_PREFIX}/lib
+      ${MYTHTV_INSTALL_PREFIX}/bin/
+      ${MYTHTV_INSTALL_PREFIX}/lib/
+      ${MYTHTV_INSTALL_PREFIX}/lib/mythtv/plugins/
+      ${LIBS_INSTALL_PREFIX}/lib/
       ${PKGMGR_LIB_DIR})
   list(REMOVE_DUPLICATES SRCHDIRS)
 
@@ -335,12 +347,12 @@ endif()
 
 # Set default macdeployqt flags
 set(QT_DARWIN_EXTRAS -verbose=1
-                     -qmlimport=${_QT_BASE}/qml/
+                     -qmlimport=${QT_QML_DIR}
                      -libpath=${MYTHTV_INSTALL_PREFIX}/lib
                      -libpath=${PKGMGR_LIB_DIR}
                      -libpath=${_QT_BASE}/lib/
-                     -libpath=${_QT_BASE}/plugins/
-                     -libpath=${_QT_BASE}/plugins/sqldrivers/)
+                     -libpath=${QT_PLUGINS_DIR}
+                     -libpath=${QT_PLUGINS_DIR}/sqldrivers/)
 
 # activate generation of the app bundle and point the application's rpath to
 # the frameworks where all dylibs must be stored
@@ -441,6 +453,17 @@ if(HOMEBREW)
       list(APPEND QT_DARWIN_EXTRAS "-libpath=${CELLAR}")
   endforeach()
 endif()
+
+#
+# An issue re-inserted by qt 6.9.0 introduces a bug where macdeployqt
+# cannot locate certain QT libraries referenced via rpath where those
+# libraries do not have an id field with rpath in the id.  Creating
+# a symlink to the package manger directory in the directory
+# where macdeployqt will be called is a documented work around.
+# https://github.com/orgs/Homebrew/discussions/2823#discussioncomment-8735051
+#
+execute_process(
+  COMMAND ${CMAKE_COMMAND} -E create_symlink "${PKGMGR_LIB_DIR}" "${BUILD_DIR}/lib")
 
 #
 # Run macdeployqt to add both the QT frameworks and any missing libraries into

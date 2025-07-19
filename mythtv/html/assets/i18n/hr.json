@@ -120,6 +120,7 @@
             "new_search": "Novi naslovi",
             "people_search": "Pretraživanje ljudi",
             "retgrid": "Povratak na prikaz mreže",
+            "subtitle_search": "Pretraživanje podnaslova",
             "title_search": "Pretraživanje naslova",
             "typecolors": "Vrsta kategorije Boje"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Ažuriraj metapodatke",
             "mnu_updaterecgrp": "Promjena grupe za snimanje",
             "mnu_updaterecrule": "Pravilo za ažuriranje zapisa",
+            "never_rec": "Nikad ne zabilježiti",
             "nonrerec": "Kako biste dopustili ponovno snimanje oštećenog programa, koristite Dopusti ponovno snimanje.",
             "normal_rec": "Normalan zapisnik",
             "orig_airdate": "Izvorni datum emitiranja",
@@ -317,6 +319,7 @@
             "inetref_desc": "Koristite TheTVDB, TVmaze ili TMDB za traženje metapodataka snimanja. Odaberite radio gumb iznad i upotrijebite vezu za pretraživanje web stranice. Nakon što pronađete ispravnu seriju na web stranici, odaberite je i kopirajte numerički ID s URL-a ili s web stranice u slučaju thetvdb.com. Unesite to u okvir za unos odmah nakon prefiksa xxxx.py_",
             "inetref_label": "ID traženja metapodataka (InetRef)",
             "input_any": "Bilo koji unos",
+            "invalid_never": "Nikada ovdje nije valjan",
             "isearch": "traži",
             "maxeps_label": "Maksimalan broj epizoda za čuvanje",
             "maxnewest_desc": "Ako nije označeno, zaustavite snimanje kada se dosegne najveći broj epizoda.",
@@ -426,8 +429,27 @@
             "status": "Status",
             "time": "Vrijeme"
         },
+        "users": {
+            "auth_all_desc": "Autentifikacija potrebna za sve IP adrese",
+            "auth_desc": "To kontrolira može li korisnik koji nije prijavio pristupiti API pozivima i stranicama web aplikacija. To se može postaviti samo dok ste prijavljeni kao administrator. Opcija za udaljene IP adrese može se odabrati samo ako se opcija 'Dopuštaju veze iz svih podmreža' odabrana u sigurnosnom postavljanju, jer bez te opcije u postavljanju sigurnosnih uređaja, udaljeni korisnici ne mogu pristupiti sustavu. Odabir se odmah ažurira, nije potreban za spremanje. Imajte na umu da čak i ako nije potrebna provjera autentičnosti, korisnik se i dalje može prijaviti i biti ovjeren ako odabere.",
+            "auth_label": "Potrebna je autentifikacija API -ja",
+            "auth_none_desc": "Nije potrebna provjera autentičnosti",
+            "auth_remote_desc": "Autentifikacija potrebna za udaljene IP adrese",
+            "auth_title": "Omogući ili onemogućite provjeru autentičnosti",
+            "authreq_fail": "Pogreška: Nije moguće postaviti ovu vrijednost.",
+            "delete_details": "Ovo će izbrisati korisnika {{ Name }}.",
+            "delete_label": "Izbriši korisnika",
+            "edit_label": "Ažuriraj korisnik",
+            "heading": "Korisnika",
+            "name_label": "Korisničko ime",
+            "new": "Novi korisnik",
+            "oldpwwrong": "Trenutna lozinka je netočna.",
+            "pwdiffer": "Lozinke se razlikuju"
+        },
         "videos": {
             "adddate": "Datum dodan",
+            "allCategories": "Sve kategorije",
+            "category": "Kategorija",
             "download": "Download Video",
             "heading": "Video zapisi",
             "releasedate": "Datum izlaska",
@@ -471,13 +493,24 @@
         "changeLanguage": "Promijeni jezik",
         "dashboard": "kontrolna ploča",
         "hide": "Sakrij gornji natpis",
+        "keep_pwd_warn": "UPOZORENJE: \"Ostanite prijavljeni\" pohranjivat će lozinku u jasan tekst u lokalnu pohranu preglednika.",
+        "keeplogin": "Ostanite prijavljeni na ovom računalu.",
         "login": "Prijaviti se",
+        "loginfail": "Prijava nije uspjela",
+        "logout": "Odjaviti",
         "mainheading": "MythTV pozadina",
         "show": "Prikaži gornji natpis",
         "switchServer": "Promijeni poslužitelj",
         "switchTheme": "Promijenite temu",
         "testbed": "Testna ploča",
-        "tvGuide": "TV vodič"
+        "tvGuide": "TV vodič",
+        "username": "Korisničko ime",
+        "userpassword": "Lozinka",
+        "users": {
+            "new_password": "Nova lozinka",
+            "new_password2": "Opet nova lozinka",
+            "old_password": "Trenutna lozinka"
+        }
     },
     "primeng": {
         "accept": "Da",
@@ -1084,8 +1117,18 @@
             "title": "Opcije EIT skenera"
         },
         "epgdownload": {
+            "args_desc": "Svi argumenti koje želite proslijediti programu podataka o vodiču.",
+            "args_label": "Vodi argumenti podataka",
             "enabled_desc": "Ako je omogućeno, program podataka vodiča pokrenut će se automatski.",
             "enabled_label": "Automatski ažurirajte popise programa",
+            "maxhr_desc": "Ova postavka i prethodni definiraju vremensko razdoblje kada se dozvoli da se pokrene program Vodiča. Na primjer, postavljanje početka na 11, a na kraju 13 značilo bi da bi program trajao samo između 11:00 i 13:59.",
+            "maxhr_label": "Kraj izvršenja programa vodiča",
+            "minhr_desc": "Ova postavka i sljedeća definiraju vremensko razdoblje kada se dozvoli pokrenuti program vodiča. Na primjer, postavljanje početka na 11, a na kraju 13 značilo bi da bi program trajao samo između 11:00 i 13:59.",
+            "minhr_label": "Vodič pokretanja programa podataka",
+            "path_desc": "Upotrijebite 'MythFillDataBase' ili naziv prilagođene skripte koja će popuniti informacije o vodiču za sve vaše video izvore.",
+            "path_label": "Vodič podataka",
+            "suggest_desc": "Ako je omogućeno, dopustite davatelja podataka vodiča da odredi sljedeće vrijeme preuzimanja kako bi distribuirao opterećenje na svojim poslužiteljima. Zanemarivaju se i izvođenje programa za pokretanje programa podataka o podacima.",
+            "suggest_label": "Pokrenite program podataka o vodiču u vrijeme koji je predložio grabber",
             "title": "Mogućnosti preuzimanja rasporeda programa"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "Imati '{{Name}}' bazu podataka",
             "havenotdb": "Nemate '{{Name}}' bazu podataka",
-            "schemaver": "Verzija sheme baze podataka je {{SchemaVersion}}"
+            "schemaver": "Verzija sheme baze podataka je {{SchemaVersion}}",
+            "servertype_head": "Vrsta SQL poslužitelja:"
         },
         "done": "Gotovo",
         "enterDBLoginDetails": "Unesite podatke za prijavu u bazu podataka",

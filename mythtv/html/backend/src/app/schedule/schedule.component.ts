@@ -71,7 +71,7 @@ export class ScheduleComponent implements OnInit {
   templateId = 0;
   neverRecord = false;
   schedTypeDisabled = false;
-  newRuleType: string|undefined ;
+  newRuleType: string | undefined;
 
   htmlRegex = new RegExp("<TITLE>|</TITLE>");
 
@@ -87,7 +87,7 @@ export class ScheduleComponent implements OnInit {
   templates: RecRule[] = [];
   typeList: ListEntry[] = [];
   allChannels: MyChannel[] = [];
-  fullDetails : string = '';
+  fullDetails: string = '';
 
   srchTypeList: ListEntry[] = [
     { prompt: this.translate.instant('recrule.srch_None'), value: 'None' },
@@ -236,6 +236,12 @@ export class ScheduleComponent implements OnInit {
       this.setupData();
       this.currentForm.form.markAsPristine();
       if (this.recRule && this.newRuleType) {
+        if (this.newRuleType == 'Never Record' && this.recRule.SearchType == 'Manual Search') {
+          this.errortext = this.translate.instant('dashboard.sched.invalid_never');
+          this.errorCount = 1;
+          this.displayDlg = true;
+          return;
+        }
         this.recRule.Type = this.newRuleType;
         this.recRule.Inactive = false;
         this.save();
@@ -250,6 +256,9 @@ export class ScheduleComponent implements OnInit {
   }
 
   open(program?: ScheduleOrProgram, channel?: Channel, recRule?: RecRule, newRuleType?: string) {
+    this.program = undefined;
+    this.channel = undefined;
+    this.recRule = undefined;
     this.templateId = 0;
     this.reqProgram = program;
     this.reqChannel = channel;
@@ -322,7 +331,8 @@ export class ScheduleComponent implements OnInit {
       this.recRule = Object.assign({}, this.recRule);
       this.recRule.ParentId = this.recRule.Id;
       this.recRule.Id = 0;
-      this.recRule.SearchType = 'None';
+      if (this.recRule.SearchType != 'Manual Search')
+        this.recRule.SearchType = 'None';
       ruleType = "Override Recording";
     }
     if (!this.recRule) {
@@ -338,7 +348,7 @@ export class ScheduleComponent implements OnInit {
     if (!this.recRule.SearchType)
       this.recRule.SearchType = 'None';
 
-    if (this.program && this.channel && this.recRule.SearchType == 'None')
+    if (this.program && this.channel)
       this.mergeProgram(this.recRule, this.program, this.channel);
 
     if (this.reqProgram?.Recording?.StatusName == 'NeverRecord') {
@@ -368,13 +378,15 @@ export class ScheduleComponent implements OnInit {
     if (this.override)
       this.recRule.Inactive = false;
 
-    setTimeout(() => {
-      if (newOverride)
-        ruleType = 'Not Recording';
-      if (this.recRule)
-        this.recRule.Type = ruleType;
-      this.currentForm.form.markAsPristine();
-    }, 10);
+    if (!this.newRuleType) {
+      setTimeout(() => {
+        if (newOverride)
+          ruleType = 'Not Recording';
+        if (this.recRule)
+          this.recRule.Type = ruleType;
+        this.currentForm.form.markAsPristine();
+      }, 10);
+    }
   }
 
   setupTypeList(recRule: RecRule) {
@@ -422,15 +434,16 @@ export class ScheduleComponent implements OnInit {
             prompt: this.translate.instant('dashboard.sched.type.dont_rec_override'),
             value: 'Do not Record'
           });
-      this.typeList.push(
-        {
-          prompt: this.translate.instant('dashboard.sched.type.never_rec_override'),
-          value: 'Never Record'
-        }
-      );
+      if (this.recRule?.SearchType != 'Manual Search')
+        this.typeList.push(
+          {
+            prompt: this.translate.instant('dashboard.sched.type.never_rec_override'),
+            value: 'Never Record'
+          }
+        );
 
-      if (this.reqProgram?.Recording?.StatusName == 'CurrentRecording'
-        || this.reqProgram?.Recording?.StatusName == 'PreviousRecording')
+        // current recording = 3, prev recording = 2, never rec = 11
+      if ( this.reqProgram?.Recording?.Status && [2, 3, 11].indexOf(this.reqProgram?.Recording?.Status) != -1)
         this.typeList.push(
           {
             prompt: this.translate.instant('dashboard.sched.type.forget_history'),
@@ -489,9 +502,13 @@ export class ScheduleComponent implements OnInit {
 
 
   mergeProgram(recRule: RecRule, program: ScheduleOrProgram, channel: Channel) {
-    recRule.Title = program.Title;
-    recRule.SubTitle = program.SubTitle;
-    recRule.Description = program.Description;
+    // In searches, these fields contain search and additional tables
+    // so do not fill in the subtitle and description
+    if (recRule.SearchType == 'None') {
+      recRule.Title = program.Title;
+      recRule.SubTitle = program.SubTitle;
+      recRule.Description = program.Description;
+    }
     recRule.Category = program.Category;
     recRule.StartTime = program.StartTime;
     recRule.EndTime = program.EndTime;
@@ -729,6 +746,7 @@ export class ScheduleComponent implements OnInit {
           this.recRule.Id = x.uint;
         }
         else {
+          console.log("Unexpected response:", x, "this.recRule.Type:", this.recRule.Type);
           this.errorCount++;
           this.displayDlg = true;
           this.currentForm.form.markAsDirty();

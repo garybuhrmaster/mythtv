@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { MessageService, SortMeta } from 'primeng/api';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
 import { ScheduleLink, SchedulerSummary } from 'src/app/schedule/schedule.component';
 import { DataService } from 'src/app/services/data.service';
@@ -51,6 +51,8 @@ export class UpcomingComponent implements OnInit, SchedulerSummary {
   selectedStatus = '';
   selectedRecGroup: string | null = null;
   loadLast = 0;
+  sortField = 'StartTime';
+  sortOrder = 1;
 
   constructor(private dvrService: DvrService, private messageService: MessageService,
     private translate: TranslateService, public dataService: DataService,
@@ -63,11 +65,26 @@ export class UpcomingComponent implements OnInit, SchedulerSummary {
       .subscribe((data) => {
         this.recGroups = data.RecGroupList;
       });
+
+    let sortField = this.utility.sortStorage.getItem('upcoming.sortField');
+    if (sortField)
+      this.sortField = sortField;
+
+    let sortOrder = this.utility.sortStorage.getItem('upcoming.sortOrder');
+    if (sortOrder)
+      this.sortOrder = Number(sortOrder);
   }
 
   ngOnInit(): void {
     // Initial Load
     this.loadLazy({ first: 0, rows: 1 });
+  }
+
+    onSort(sortMeta: SortMeta) {
+    this.sortField = sortMeta.field;
+    this.sortOrder = sortMeta.order;
+    this.utility.sortStorage.setItem("upcoming.sortField", sortMeta.field);
+    this.utility.sortStorage.setItem('upcoming.sortOrder', sortMeta.order.toString());
   }
 
   fullrefresh() {
@@ -137,7 +154,7 @@ export class UpcomingComponent implements OnInit, SchedulerSummary {
       request.Count = this.loadLast;
     }
 
-    let sortField = '';
+    let sortField = this.sortField;
     if (Array.isArray(event.sortField))
       sortField = event.sortField[0];
     else if (event.sortField)
@@ -264,7 +281,8 @@ export class UpcomingComponent implements OnInit, SchedulerSummary {
       this.program = program;
       this.errorCount = 0;
       this.dvrService.ReactivateRecording({
-        ChanId: program.Channel.ChanId,
+        // Do not include chanid and starttime because the start time may not
+        // match the MythTV database if the recording started early or late
         RecordId: program.Recording.RecordId
       }).subscribe({
         next: (x) => {

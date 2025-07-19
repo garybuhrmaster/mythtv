@@ -125,7 +125,7 @@ if(ENABLE_BINDINGS_PYTHON)
       STATUS "Missing some required python modules. Disabling python bindings.")
   else()
     message(
-      STATUS "Python interperter and modules found. Enabling python bindings.")
+      STATUS "Python interpreter and modules found. Enabling python bindings.")
     set(USING_BINDINGS_PYTHON TRUE)
     set(CONFIG_BINDINGS_PYTHON TRUE)
   endif()
@@ -165,7 +165,7 @@ if(ENABLE_BINDINGS_PERL)
     message(STATUS "Missing some perl modules. Disabling perl bindings.")
   else()
     message(
-      STATUS "Perl interperter and modules found. Enabling perl bindings.")
+      STATUS "Perl interpreter and modules found. Enabling perl bindings.")
     set(USING_BINDINGS_PERL TRUE)
   endif()
   add_build_config(USING_BINDINGS_PERL "bindings_perl")
@@ -188,7 +188,7 @@ if(ENABLE_BINDINGS_PHP)
   elseif(PHPModules_REQUIRED_MISSING)
     message(STATUS "Missing some PHP modules. Disabling PHP bindings.")
   else()
-    message(STATUS "PHP interperter and modules found. Enabling php bindings.")
+    message(STATUS "PHP interpreter and modules found. Enabling php bindings.")
     set(USING_BINDINGS_PHP TRUE)
   endif()
   add_build_config(USING_BINDINGS_PHP "bindings_php")
@@ -491,7 +491,6 @@ if(APPLE)
   find_library(APPLE_COREFOUNDATION_LIBRARY CoreFoundation)
   find_library(APPLE_CORESERVICES_LIBRARY CoreServices)
   find_library(APPLE_COREVIDEO_LIBRARY CoreVideo)
-  # So far, only OS X 10.4 has this as a non-private framework
   find_library(APPLE_DISKARBITRATION_LIBRARY DiskArbitration)
   find_library(APPLE_IOKIT_LIBRARY IOKit)
   find_library(APPLE_IOSURFACE_LIBRARY IOSurface)
@@ -505,9 +504,31 @@ if(APPLE)
     set(ENABLE_FIREWIRE OFF)
   endif()
 
-  set(CONFIG_DARWIN_DA ${APPLE_DISKARBITRATION_LIBRARY})
+  message(VERBOSE "Frameworks found:")
+  message(VERBOSE "  APPLE_APPLICATIONSERVICES_LIBRARY: ${APPLE_APPLICATIONSERVICES_LIBRARY}")
+  message(VERBOSE "  APPLE_AUDIOTOOLBOX_LIBRARY: ${APPLE_AUDIOTOOLBOX_LIBRARY}")
+  message(VERBOSE "  APPLE_AUDIOUNIT_LIBRARY: ${APPLE_AUDIOUNIT_LIBRARY}")
+  message(VERBOSE "  APPLE_AVCVIDEOSERVICES_LIBRARY: ${APPLE_AVCVIDEOSERVICES_LIBRARY}")
+  message(VERBOSE "  APPLE_COCOA_LIBRARY: ${APPLE_COCOA_LIBRARY}")
+  message(VERBOSE "  APPLE_COREAUDIO_LIBRARY: ${APPLE_COREAUDIO_LIBRARY}")
+  message(VERBOSE "  APPLE_COREFOUNDATION_LIBRARY: ${APPLE_COREFOUNDATION_LIBRARY}")
+  message(VERBOSE "  APPLE_CORESERVICES_LIBRARY: ${APPLE_CORESERVICES_LIBRARY}")
+  message(VERBOSE "  APPLE_COREVIDEO_LIBRARY: ${APPLE_COREVIDEO_LIBRARY}")
+  message(VERBOSE "  APPLE_DISKARBITRATION_LIBRARY: ${APPLE_DISKARBITRATION_LIBRARY}")
+  message(VERBOSE "  APPLE_IOKIT_LIBRARY: ${APPLE_IOKIT_LIBRARY}")
+  message(VERBOSE "  APPLE_IOSURFACE_LIBRARY: ${APPLE_IOSURFACE_LIBRARY}")
+  message(VERBOSE "  APPLE_OPENGL_LIBRARY: ${APPLE_OPENGL_LIBRARY}")
+  message(VERBOSE "  APPLE_VIDEOTOOLBOX_LIBRARY: ${APPLE_VIDEOTOOLBOX_LIBRARY}")
 
-  # Take our cue on videotolbox from ffmpeg
+  #
+  # Check for symbols in darwin include files
+  #
+  cmake_push_check_state()
+  set(CMAKE_REQUIRED_LIBRARIES ${APPLE_IOKIT_LIBRARY})
+  check_symbol_exists(IOMainPort "IOKit/IOKitLib.h" HAVE_IOMAINPORT)
+  cmake_pop_check_state()
+
+  # If ffmpeg disabled videotoolbox then disable it
   find_program(_ffmpeg mythffmpeg)
   find_library(_avcodec mythavdevice)
   cmake_path(GET _avcodec PARENT_PATH _avcodec_path)
@@ -519,14 +540,19 @@ if(APPLE)
   endif()
   execute_process(
     COMMAND ${CMAKE_COMMAND} -E env LD_LIBRARY_PATH=${_avcodec_path}
-            ${_ffmpeg} -decoders
+            ${_ffmpeg} -encoders
     OUTPUT_VARIABLE _output
     ERROR_QUIET)
-  message(STATUS "Looking for videotoolbox: ${_output}")
+  message(VERBOSE "ffmpeg -encoders output: ${_output}")
   string(FIND ${_output} videotoolbox VIDEOTOOLBOX_OFFSET)
   if(VIDEOTOOLBOX_OFFSET EQUAL -1)
+    message(STATUS "disabling videotoolbox support (not present in ffmpeg)")
     unset(APPLE_VIDEOTOOLBOX_LIBRARY)
   endif()
+
+  # Set config variable based on library presence
+  set(CONFIG_DARWIN_DA ${APPLE_DISKARBITRATION_LIBRARY})
+  set(CONFIG_VIDEOTOOLBOX ${APPLE_VIDEOTOOLBOX_LIBRARY})
 
   mark_as_advanced(
     APPLE_APPLICATIONSERVICES_LIBRARY

@@ -120,6 +120,7 @@
             "new_search": "Novos títulos",
             "people_search": "Pesquisa de pessoas",
             "retgrid": "Retornar à Exibição da Grade",
+            "subtitle_search": "Pesquisa de legenda",
             "title_search": "Pesquisa de título",
             "typecolors": "Categoria Tipo Cores"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Atualizar metadados",
             "mnu_updaterecgrp": "Alterar grupo de gravação",
             "mnu_updaterecrule": "Atualizar regra de registro",
+            "never_rec": "Nunca grave",
             "nonrerec": "Para permitir a regravação do programa danificado, use Permitir nova gravação.",
             "normal_rec": "Registro normal",
             "orig_airdate": "Data Original de Transmissão",
@@ -317,6 +319,7 @@
             "inetref_desc": "Use TheTVDB, TVmaze ou TMDB para procurar metadados de gravação. Selecione um botão de opção acima e use o link para pesquisar no site. Depois de encontrar a série correta na página da web, selecione-a e copie o id numérico da URL ou da página da web no caso de thetvdb.com. Digite isso na caixa de entrada imediatamente após o prefixo xxxx.py_",
             "inetref_label": "ID de pesquisa de metadados (InetRef)",
             "input_any": "Qualquer entrada",
+            "invalid_never": "Nunca o registro não é válido aqui",
             "isearch": "Procurar",
             "maxeps_label": "Número Máximo de Episódios a Manter",
             "maxnewest_desc": "Se desmarcado, pare de gravar quando o número máximo de episódios for atingido.",
@@ -426,8 +429,27 @@
             "status": "Status",
             "time": "Tempo"
         },
+        "users": {
+            "auth_all_desc": "Autenticação necessária para todos os endereços IP",
+            "auth_desc": "Isso controla se um usuário que não se inscreveu pode acessar as chamadas da API e as páginas do aplicativo da Web. Isso só pode ser definido enquanto você está conectado como admin. A opção para endereços IP remotos só pode ser selecionada se a opção 'Permitir conexões de todas as sub -redes' for selecionada na configuração de back -end porque, sem essa opção na configuração de back -end, os usuários remotos não podem acessar o sistema. A seleção é atualizada imediatamente, não é necessário salvar. Observe que, mesmo que nenhuma autenticação seja necessária, um usuário ainda poderá fazer login e ser autenticado se escolher.",
+            "auth_label": "Autenticação da API necessária",
+            "auth_none_desc": "Nenhuma autenticação é necessária",
+            "auth_remote_desc": "Autenticação necessária para endereços IP remotos",
+            "auth_title": "Ativar ou desativar a autenticação",
+            "authreq_fail": "ERRO: Não é possível definir esse valor.",
+            "delete_details": "Isso excluirá o usuário {{ Name }}.",
+            "delete_label": "Excluir usuário",
+            "edit_label": "Atualize o usuário",
+            "heading": "Usuários",
+            "name_label": "Nome de usuário",
+            "new": "Novo usuário",
+            "oldpwwrong": "A senha atual está incorreta.",
+            "pwdiffer": "As senhas diferem"
+        },
         "videos": {
             "adddate": "Data adicionada",
+            "allCategories": "Todas as categorias",
+            "category": "Categoria",
             "download": "Baixar video",
             "heading": "Vídeos",
             "releasedate": "Data de lançamento",
@@ -471,13 +493,24 @@
         "changeLanguage": "Mudar idioma",
         "dashboard": "Painel",
         "hide": "Ocultar banner superior",
+        "keep_pwd_warn": "Aviso: \"Stay conectado\" armazenará a senha em texto claro no armazenamento local do navegador.",
+        "keeplogin": "Fique conectado neste computador.",
         "login": "Conecte-se",
+        "loginfail": "Falha no login",
+        "logout": "Log Out",
         "mainheading": "Back-end MythTV",
         "show": "Mostrar banner principal",
         "switchServer": "Alternar Servidor",
         "switchTheme": "Troque de Tema",
         "testbed": "Testbed",
-        "tvGuide": "guia de TV"
+        "tvGuide": "guia de TV",
+        "username": "Nome de usuário",
+        "userpassword": "Senha",
+        "users": {
+            "new_password": "Nova Senha",
+            "new_password2": "Nova senha novamente",
+            "old_password": "Senha atual"
+        }
     },
     "primeng": {
         "accept": "Sim",
@@ -1084,8 +1117,18 @@
             "title": "Opções do scanner EIT"
         },
         "epgdownload": {
+            "args_desc": "Quaisquer argumentos que você desejar passou para o programa de dados do guia.",
+            "args_label": "Orientar argumentos de dados",
             "enabled_desc": "Se ativado, o programa de dados do guia será executado automaticamente.",
             "enabled_label": "Atualize automaticamente as listas de programas",
+            "maxhr_desc": "Essa configuração e o anterior definem um período de tempo em que o programa de dados do guia é autorizado a ser executado. Por exemplo, a configuração do início das 11 e do final para 13 significaria que o programa só funcionaria entre 11:00 e 13:59.",
+            "maxhr_label": "Guia de execução do programa de dados final",
+            "minhr_desc": "Essa configuração e a seguinte definem um período em que o programa de dados do guia é permitido executar. Por exemplo, a configuração do início das 11 e do final para 13 significaria que o programa só funcionaria entre 11:00 e 13:59.",
+            "minhr_label": "Guide Data Program Execution Start",
+            "path_desc": "Use 'mythfilldatabase' ou o nome de um script personalizado que preencherá as informações do guia do programa para todas as suas fontes de vídeo.",
+            "path_label": "Guide Data Program",
+            "suggest_desc": "Se ativado, permita que um provedor de dados do guia especifique o próximo tempo de download para distribuir o carregamento em seus servidores. Guia de execução do programa de dados Os horários de partida/final também são ignorados.",
+            "suggest_label": "Executar o programa de dados do guia no momento sugerido pelo Grabber",
             "title": "Opções de download do cronograma do programa"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "Ter banco de dados '{{Name}}'",
             "havenotdb": "Não tem banco de dados '{{Name}}'",
-            "schemaver": "A versão do esquema do banco de dados é {{SchemaVersion}}"
+            "schemaver": "A versão do esquema do banco de dados é {{SchemaVersion}}",
+            "servertype_head": "Tipo de servidor SQL:"
         },
         "done": "Feito",
         "enterDBLoginDetails": "Digite os detalhes de login do banco de dados",

@@ -120,6 +120,7 @@
             "new_search": "Nýir titlar",
             "people_search": "Fólksleit",
             "retgrid": "Fara aftur í Grid Display",
+            "subtitle_search": "Texti leit",
             "title_search": "Titilleit",
             "typecolors": "Flokkur Tegund Litir"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Uppfærðu lýsigögn",
             "mnu_updaterecgrp": "Skiptu um upptökuhóp",
             "mnu_updaterecrule": "Uppfærðu skráningarreglu",
+            "never_rec": "Aldrei skrá",
             "nonrerec": "Til að leyfa endurupptöku á skemmda forritinu skaltu nota Leyfa endurupptöku.",
             "normal_rec": "Venjulegt met",
             "orig_airdate": "Upprunaleg flugdagsetning",
@@ -317,6 +319,7 @@
             "inetref_desc": "Notaðu TheTVDB, TVmaze eða TMDB til að fletta upp upptökulýsigögnum. Veldu valhnapp fyrir ofan og notaðu hlekkinn til að leita á vefsíðunni. Þegar þú hefur fundið réttu röðina á vefsíðunni skaltu velja hana og afrita tölulega auðkennið af vefslóðinni, eða af vefsíðunni ef um er að ræða thetvdb.com. Sláðu það inn í inntaksreitinn strax á eftir forskeytinu xxxx.py_",
             "inetref_label": "Auðkenni lýsigagnaleitar (InetRef)",
             "input_any": "Hvaða inntak sem er",
+            "invalid_never": "Aldrei skrá er ekki gild hér",
             "isearch": "Leita",
             "maxeps_label": "Hámarksfjöldi þátta til að geyma",
             "maxnewest_desc": "Ef ekki hakað við skaltu hætta að taka upp þegar hámarksþáttum er náð.",
@@ -426,8 +429,27 @@
             "status": "Staða",
             "time": "Tími"
         },
+        "users": {
+            "auth_all_desc": "Sannvottun sem krafist er fyrir öll IP -tölur",
+            "auth_desc": "Þetta stjórnar því hvort notandi sem hefur ekki skráð sig inn geti fengið aðgang að API símtölunum og vefsíðum. Þetta er aðeins hægt að stilla á meðan þú ert skráður inn sem admin. Aðeins er hægt að velja valkosturinn fyrir ytri IP -tölur ef valkosturinn „leyfa tengingar frá öllum undirnetum“ er valinn í uppsetningu backend því án þess að valkosturinn sé í uppsetningu backends geta ytri notendur ekki fengið aðgang að kerfinu. Valið er uppfært strax, ekki er krafist neins vistunar. Athugaðu að jafnvel þó að ekki sé krafist auðkenningar getur notandi samt skráð sig inn og verið staðfestur ef hann velur.",
+            "auth_label": "API sannvottun krafist",
+            "auth_none_desc": "Engin staðfesting krafist",
+            "auth_remote_desc": "Sannvottun sem krafist er fyrir ytri IP -tölur",
+            "auth_title": "Virkja eða slökkva á sannvottun",
+            "authreq_fail": "Villa: Ekki er hægt að stilla þetta gildi.",
+            "delete_details": "Þetta mun eyða notanda {{ Name }}.",
+            "delete_label": "Eyða notanda",
+            "edit_label": "Uppfærðu notanda",
+            "heading": "Notendur",
+            "name_label": "Notandanafn",
+            "new": "Nýr notandi",
+            "oldpwwrong": "Núverandi lykilorð er rangt.",
+            "pwdiffer": "Lykilorð eru mismunandi"
+        },
         "videos": {
             "adddate": "Dagsetning bætt við",
+            "allCategories": "Allir flokkar",
+            "category": "Flokkur",
             "download": "Sækja myndbandið",
             "heading": "Myndbönd",
             "releasedate": "Útgáfudagur",
@@ -471,13 +493,24 @@
         "changeLanguage": "Cambia lingua",
         "dashboard": "Cruscotto",
         "hide": "Fela efsta borðann",
+        "keep_pwd_warn": "Viðvörun: „Vertu skráður inn“ mun geyma lykilorðið í skýrum texta í geymslu vafrans.",
+        "keeplogin": "Vertu skráður inn á þessa tölvu.",
         "login": "Accesso",
+        "loginfail": "Innskráning mistókst",
+        "logout": "Skráðu þig út",
         "mainheading": "MythTV Backend",
         "show": "Sýna efsta borðann",
         "switchServer": "Cambia server",
         "switchTheme": "Cambia tema",
         "testbed": "Banco di prova",
-        "tvGuide": "guida tv"
+        "tvGuide": "guida tv",
+        "username": "Notandanafn",
+        "userpassword": "Lykilorð",
+        "users": {
+            "new_password": "Nýtt lykilorð",
+            "new_password2": "Nýtt lykilorð aftur",
+            "old_password": "Núverandi lykilorð"
+        }
     },
     "primeng": {
         "accept": "Já",
@@ -1084,8 +1117,18 @@
             "title": "EIT skannivalkostir"
         },
         "epgdownload": {
+            "args_desc": "Öll rök sem þú vilt fara í leiðarvísagagnaforritið.",
+            "args_label": "Leiðbeina gögnum rökum",
             "enabled_desc": "Ef það er virkt mun leiðargagnaforritið keyra sjálfkrafa.",
             "enabled_label": "Uppfærðu forritaskráningar sjálfkrafa",
+            "maxhr_desc": "Þessi stilling og sú fyrri skilgreina tímabil þar sem leiðbeiningargagnaforritinu er leyft að keyra. Til dæmis, að setja byrjun á 11 og enda á 13 myndi þýða að forritið myndi aðeins keyra á milli klukkan 11:00 og 13:59.",
+            "maxhr_label": "Leiðbeiningar um framkvæmd forrits",
+            "minhr_desc": "Þessi stilling og eftirfarandi skilgreina tímabil þar sem leiðbeiningargagnaforritinu er leyft að keyra. Til dæmis, að setja byrjun á 11 og enda á 13 myndi þýða að forritið myndi aðeins keyra á milli klukkan 11:00 og 13:59.",
+            "minhr_label": "Leiðbeina framkvæmd gagnaáætlunar",
+            "path_desc": "Notaðu 'MythFillDatabase' eða nafn sérsniðinna handrits sem byggir upplýsingar um forritaleiðbeiningarnar fyrir allar myndbandsgjafar þínar.",
+            "path_label": "Leiðbeiningar um gagnaáætlun",
+            "suggest_desc": "Ef það er virkt, leyfðu leiðbeiningargagnaaðila að tilgreina næsta niðurhalstíma til að dreifa álagi á netþjónum sínum. Einnig er hunsað leiðsögn um framkvæmd gagnaáætlunar.",
+            "suggest_label": "Keyrðu leiðbeiningargagnaforritið á þeim tíma sem Grabber lagði til",
             "title": "Valkostir til að hlaða niður forritaáætlun"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "Hafa '{{Name}}' gagnagrunn",
             "havenotdb": "Ertu ekki með '{{Name}}' gagnagrunn",
-            "schemaver": "Útgáfa gagnagrunnsskema er {{SchemaVersion}}"
+            "schemaver": "Útgáfa gagnagrunnsskema er {{SchemaVersion}}",
+            "servertype_head": "SQL Server Type:"
         },
         "done": "Fatto",
         "enterDBLoginDetails": "Immettere i dettagli di accesso al database",

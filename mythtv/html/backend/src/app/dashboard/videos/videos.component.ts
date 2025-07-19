@@ -1,11 +1,11 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { MenuItem, MessageService } from 'primeng/api';
+import { MenuItem, MessageService, SortMeta } from 'primeng/api';
 import { Menu } from 'primeng/menu';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
 import { PartialObserver } from 'rxjs';
-import { GetVideoListRequest, UpdateVideoMetadataRequest, VideoMetadataInfo } from 'src/app/services/interfaces/video.interface';
+import { GetVideoListRequest, UpdateVideoMetadataRequest, VideoCategories, VideoCategoryList, VideoMetadataInfo } from 'src/app/services/interfaces/video.interface';
 import { UtilityService } from 'src/app/services/utility.service';
 import { VideoService } from 'src/app/services/video.service';
 
@@ -27,6 +27,7 @@ export class VideosComponent implements OnInit {
   successCount = 0;
   errorCount = 0;
   directory: string[] = [];
+  catGroups: VideoCategories[] = [];
   video: VideoMetadataInfo = <VideoMetadataInfo>{ Title: '' };
   editingVideo?: VideoMetadataInfo;
   displayMetadataDlg = false;
@@ -35,7 +36,13 @@ export class VideosComponent implements OnInit {
   lazyLoadEvent: TableLazyLoadEvent = {};
   totalRecords = 0;
   showTable = false;
+  searchValue = '';
+  selectedCategory: number | null = null;
+  priorRequest: GetVideoListRequest = {};
   virtualScrollItemSize = 0;
+  authorization = '';
+  sortField = 'Title';
+  sortOrder = 1;
 
   mnu_markwatched: MenuItem = { label: 'dashboard.recordings.mnu_markwatched', command: (event) => this.markwatched(event, true) };
   mnu_markunwatched: MenuItem = { label: 'dashboard.recordings.mnu_markunwatched', command: (event) => this.markwatched(event, false) };
@@ -52,6 +59,18 @@ export class VideosComponent implements OnInit {
 
   constructor(private videoService: VideoService, private translate: TranslateService,
     private messageService: MessageService, public utility: UtilityService) {
+
+    this.videoService.GetCategoryList()
+      .subscribe((data: VideoCategoryList) => {
+        this.catGroups = data.VideoCategoryList.VideoCategories;
+        this.catGroups.sort((a, b) => {
+          return a.Name?.localeCompare(b.Name || '') || 0
+        });
+        this.translate.get('dashboard.videos.allCategories').subscribe(translated =>{
+          this.catGroups.unshift({ Id: -1, Name: translated});
+        });
+      });
+
     // translations
     for (const [key, value] of Object.entries(this.msg)) {
       this.translate.get(value).subscribe(data => {
@@ -67,6 +86,13 @@ export class VideosComponent implements OnInit {
         );
     });
 
+    let sortField = this.utility.sortStorage.getItem('videos.sortField');
+    if (sortField)
+      this.sortField = sortField;
+
+    let sortOrder = this.utility.sortStorage.getItem('videos.sortOrder');
+    if (sortOrder)
+      this.sortOrder = Number(sortOrder);
   }
 
   ngOnInit(): void {
@@ -74,7 +100,19 @@ export class VideosComponent implements OnInit {
     this.loadLazy({ first: 0, rows: 1 });
   }
 
+  onSort(sortMeta: SortMeta) {
+    this.sortField = sortMeta.field;
+    this.sortOrder = sortMeta.order;
+    this.utility.sortStorage.setItem("videos.sortField", sortMeta.field);
+    this.utility.sortStorage.setItem('videos.sortOrder', sortMeta.order.toString());
+  }
+
   loadLazy(event: TableLazyLoadEvent) {
+    let accessToken = sessionStorage.getItem('accessToken');
+    if (accessToken == null)
+      this.authorization = ''
+    else
+      this.authorization = '&authorization=' + accessToken;
     this.lazyLoadEvent = event;
     let request: GetVideoListRequest = {
       Sort: "title",
@@ -92,23 +130,30 @@ export class VideosComponent implements OnInit {
         request.Count = event.rows;
     }
 
-    let sortField = '';
+    let sortField = this.sortField;
     if (Array.isArray(event.sortField))
       sortField = event.sortField[0];
     else if (event.sortField)
       sortField = event.sortField;
-    if (!sortField)
-      sortField = 'title';
-    if (sortField) {
-      request.Sort = sortField;
-      if (event.sortOrder)
-        request.Descending = (event.sortOrder < 0);
-    }
+    request.Sort = sortField;
+    if (event.sortOrder)
+      request.Descending = (event.sortOrder < 0);
     if (request.Sort == 'SeasEp')
       request.Sort = `season,episode,title,releasedate`;
     else
-      request.Sort += ',title,releasedate,season,episode'
+      request.Sort += ',title,releasedate,season,episode';
+    this.searchValue = this.searchValue.trim();
+    if (this.searchValue)
+      request.TitleRegEx = this.searchValue;
+    if (this.selectedCategory != null)
+      request.Category = this.selectedCategory;
 
+    if (request.TitleRegEx != this.priorRequest.TitleRegEx
+      || request.Category != this.priorRequest.Category) {
+      this.menu.hide();
+      this.priorRequest = request;
+      this.showTable = false;
+    }
     this.videoService.GetVideoList(request).subscribe(data => {
       let newList = data.VideoMetadataInfoList;
       this.totalRecords = data.VideoMetadataInfoList.TotalAvailable;
@@ -139,8 +184,22 @@ export class VideosComponent implements OnInit {
     this.loadLazy(({ first: 0, rows: 1 }));
   }
 
+  onFilter() {
+    this.reLoadVideos();
+  }
+
   showAllChange() {
     setTimeout(() => this.reLoadVideos(), 100);
+  }
+
+  resetSearch() {
+    this.searchValue = '';
+    this.reLoadVideos();
+  }
+
+  keydown(event: KeyboardEvent) {
+    if (event.key == "Enter")
+      this.onFilter();
   }
 
   URLencode(x: string): string {

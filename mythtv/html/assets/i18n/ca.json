@@ -120,6 +120,7 @@
             "new_search": "Nous Títols",
             "people_search": "Cerca de persones",
             "retgrid": "Torna a la pantalla de quadrícula",
+            "subtitle_search": "Cerca de subtítols",
             "title_search": "Cerca de títols",
             "typecolors": "Categoria Tipus Colors"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Actualitza les metadades",
             "mnu_updaterecgrp": "Canvia el grup de gravació",
             "mnu_updaterecrule": "Actualitza la regla de registre",
+            "never_rec": "Mai gravi",
             "nonrerec": "Per permetre tornar a enregistrar el programa danyat, utilitzeu Permet tornar a gravar.",
             "normal_rec": "Registre normal",
             "orig_airdate": "Data d'emissió original",
@@ -317,6 +319,7 @@
             "inetref_desc": "Utilitzeu TheTVDB, TVmaze o TMDB per cercar metadades de gravació. Seleccioneu un botó d'opció a dalt i utilitzeu l'enllaç per cercar al lloc web. Un cop trobeu la sèrie correcta a la pàgina web, seleccioneu-la i copieu l'identificador numèric de l'URL o de la pàgina web en el cas de thetvdb.com. Introduïu-ho al quadre d'entrada immediatament després del prefix xxxx.py_",
             "inetref_label": "Identificador de cerca de metadades (InetRef)",
             "input_any": "Qualsevol entrada",
+            "invalid_never": "Mai el registre no és vàlid aquí",
             "isearch": "Cerca",
             "maxeps_label": "Nombre màxim d'episodis per conservar",
             "maxnewest_desc": "Si no està marcat, atura la gravació quan s'arribi al màxim d'episodis.",
@@ -426,8 +429,27 @@
             "status": "Estat",
             "time": "Temps"
         },
+        "users": {
+            "auth_all_desc": "Autenticació necessària per a totes les adreces IP",
+            "auth_desc": "Això controla si un usuari que no ha signat pot accedir a les trucades API i a les pàgines d'aplicacions web. Això només es pot configurar mentre es connecta com a administrador. L'opció per a adreces IP remotes només es pot seleccionar si l'opció \"Permet connexions de totes les subxarxes\" està seleccionada en la configuració de backend, ja que sense aquesta opció en la configuració de backend, els usuaris remots no poden accedir al sistema. La selecció s’actualitza immediatament, no cal desar. Tingueu en compte que, fins i tot si no es requereix autenticació, un usuari encara pot iniciar la sessió i es pot autenticar si decideix.",
+            "auth_label": "Autenticació API necessària",
+            "auth_none_desc": "No cal autenticació",
+            "auth_remote_desc": "Autenticació necessària per a adreces IP remotes",
+            "auth_title": "Activa o desactiva l'autenticació",
+            "authreq_fail": "Error: no es pot definir aquest valor.",
+            "delete_details": "Això eliminarà l'usuari {{ Name }}.",
+            "delete_label": "Suprimeix l'usuari",
+            "edit_label": "Actualitzeu l'usuari",
+            "heading": "Usuaris",
+            "name_label": "Nom d'usuari",
+            "new": "Usuari nou",
+            "oldpwwrong": "La contrasenya actual és incorrecta.",
+            "pwdiffer": "Les contrasenyes difereixen"
+        },
         "videos": {
             "adddate": "Data afegida",
+            "allCategories": "Totes les categories",
+            "category": "Categoria",
             "download": "Descarrega el vídeo",
             "heading": "Vídeos",
             "releasedate": "Data de publicació",
@@ -471,13 +493,24 @@
         "changeLanguage": "Canviar d'idioma",
         "dashboard": "panell",
         "hide": "Amaga el bàner superior",
+        "keep_pwd_warn": "ADVERTIMENT: \"Quedeu -vos iniciant la sessió\" emmagatzemarà la contrasenya amb un text clar a l'emmagatzematge local del navegador.",
+        "keeplogin": "Mantingueu la sessió en aquest ordinador.",
         "login": "Iniciar Sessió",
+        "loginfail": "Inici de sessió ha fallat",
+        "logout": "Tancar la sessió",
         "mainheading": "Backend de MythTV",
         "show": "Mostra el bàner superior",
         "switchServer": "Canvia de servidor",
         "switchTheme": "Canvia el tema",
         "testbed": "Banc de proves",
-        "tvGuide": "Guia televisiva"
+        "tvGuide": "Guia televisiva",
+        "username": "Nom d'usuari",
+        "userpassword": "Contrasenya",
+        "users": {
+            "new_password": "Nova contrasenya",
+            "new_password2": "Una nova contrasenya de nou",
+            "old_password": "Contrasenya actual"
+        }
     },
     "primeng": {
         "accept": "Sí",
@@ -1084,8 +1117,18 @@
             "title": "Opcions de l'EIT Scanner"
         },
         "epgdownload": {
+            "args_desc": "Qualsevol argument que vulgueu passar al programa de dades de la guia.",
+            "args_label": "Guia els arguments de dades",
             "enabled_desc": "Si està activat, el programa de dades de guia s'executarà automàticament.",
             "enabled_label": "Actualitza automàticament les llistes de programes",
+            "maxhr_desc": "Aquesta configuració i la precedent es defineixen un període de temps en què es permet executar el programa de dades de guia. Per exemple, la configuració d’inici d’11 i final a 13 significaria que el programa només funcionaria entre les 11:00 i les 13:59.",
+            "maxhr_label": "Guia el programa de dades final",
+            "minhr_desc": "Aquesta configuració i la següent es defineixen un període de temps en què es pot executar el programa de dades de la guia. Per exemple, la configuració d’inici d’11 i final a 13 significaria que el programa només funcionaria entre les 11:00 i les 13:59.",
+            "minhr_label": "Guia Inici de l'execució del programa de dades",
+            "path_desc": "Utilitzeu \"MythfillDatabase\" o el nom d'un script personalitzat que poblarà la informació de la guia del programa per a totes les vostres fonts de vídeo.",
+            "path_label": "Programa de dades de guies",
+            "suggest_desc": "Si està activat, permeteu a un proveïdor de dades de la guia especificar el següent temps de descàrrega per distribuir la càrrega als seus servidors. També s’ignoren els temps d’inici/finalització del programa de dades.",
+            "suggest_label": "Executeu el programa de dades de la guia en el moment suggerit pel Grabber",
             "title": "Opcions de descàrrega de programació del programa"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "Teniu la base de dades \"{{Name}}\".",
             "havenotdb": "No teniu una base de dades \"{{Name}}\".",
-            "schemaver": "La versió de l'esquema de la base de dades és {{SchemaVersion}}"
+            "schemaver": "La versió de l'esquema de la base de dades és {{SchemaVersion}}",
+            "servertype_head": "Tipus de servidor SQL:"
         },
         "done": "Fet",
         "enterDBLoginDetails": "Introduïu les dades d'inici de sessió de la base de dades",

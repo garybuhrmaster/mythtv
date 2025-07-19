@@ -120,6 +120,7 @@
             "new_search": "Uudet otsikot",
             "people_search": "Ihmiset haku",
             "retgrid": "Palaa ruudukkonäyttöön",
+            "subtitle_search": "Tekstityshaku",
             "title_search": "Otsikkohaku",
             "typecolors": "Luokka Tyyppi Värit"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Päivitä metatiedot",
             "mnu_updaterecgrp": "Muuta tallennusryhmää",
             "mnu_updaterecrule": "Päivitä tallennussääntö",
+            "never_rec": "Älä koskaan nauhoita",
             "nonrerec": "Jos haluat sallia vaurioituneen ohjelman uudelleentallentamisen, käytä Salli nauhoitus uudelleen.",
             "normal_rec": "Normaali ennätys",
             "orig_airdate": "Alkuperäinen lentopäivämäärä",
@@ -317,6 +319,7 @@
             "inetref_desc": "Käytä TheTVDB:tä, TVmazea tai TMDB:tä etsiäksesi tallennuksen metatietoja. Valitse yllä oleva valintanappi ja hae Web-sivustosta linkin avulla. Kun löydät oikean sarjan verkkosivulta, valitse se ja kopioi numeerinen tunnus URL-osoitteesta tai verkkosivulta, jos kyseessä on thetvdb.com. Kirjoita se syöttöruutuun heti etuliite xxxx.py_ jälkeen",
             "inetref_label": "Metatietojen hakutunnus (InetRef)",
             "input_any": "Mikä tahansa syöttö",
+            "invalid_never": "Koskaan nauhoitus ei ole voimassa täällä",
             "isearch": "Hae",
             "maxeps_label": "Säilytettävien jaksojen enimmäismäärä",
             "maxnewest_desc": "Jos tätä ei ole valittu, lopeta tallennus, kun jaksojen enimmäismäärä on saavutettu.",
@@ -426,8 +429,27 @@
             "status": "Tila",
             "time": "Aika"
         },
+        "users": {
+            "auth_all_desc": "Kaikille IP -osoitteille vaaditaan todennus",
+            "auth_desc": "Tämä hallitsee, voivatko käyttäjä, joka ei ole allekirjoittanut API -puheluita ja verkkosovellussivuja. Tämä voidaan asettaa vain, kun olet kirjautunut sisään järjestelmänvalvojana. Etä -IP -osoitteiden vaihtoehto voidaan valita vain, jos vaihtoehto 'Salli yhteydet kaikista aliverkoista' valitaan taustaohjelmassa, koska ilman tätä vaihtoehtoa taustaohjelmassa etäkäyttäjät eivät pääse järjestelmään. Valinta päivitetään heti, tallennusta ei tarvita. Huomaa, että vaikka todennusta ei vaadita, käyttäjä voi silti kirjautua sisään ja todentaa, jos hän valitsee.",
+            "auth_label": "API -todennus vaaditaan",
+            "auth_none_desc": "Todennusta ei vaadita",
+            "auth_remote_desc": "Etä -IP -osoitteisiin vaaditaan todennus",
+            "auth_title": "Ota todennus käyttöön tai poista käytöstä",
+            "authreq_fail": "Virhe: Tätä arvoa ei voi asettaa.",
+            "delete_details": "Tämä poistaa käyttäjän {{ Name }}.",
+            "delete_label": "Poista käyttäjä",
+            "edit_label": "Päivitä käyttäjä",
+            "heading": "Käyttäjät",
+            "name_label": "Käyttäjänimi",
+            "new": "Uusi käyttäjä",
+            "oldpwwrong": "Nykyinen salasana on väärä.",
+            "pwdiffer": "Salasanat eroavat toisistaan"
+        },
         "videos": {
             "adddate": "Päivämäärä lisätty",
+            "allCategories": "Kaikki luokat",
+            "category": "Luokka",
             "download": "Lataa video",
             "heading": "Videot",
             "releasedate": "Julkaisupäivä",
@@ -471,13 +493,24 @@
         "changeLanguage": "Vaihda kieltä",
         "dashboard": "kojelauta",
         "hide": "Piilota ylin banneri",
+        "keep_pwd_warn": "VAROITUS: \"Pysy kirjautuneena\" tallentaa salasanan selkeään tekstiin selaimen paikallisessa tallennustilassa.",
+        "keeplogin": "Pysy kirjautuneena tähän tietokoneeseen.",
         "login": "kirjaudu sisään",
+        "loginfail": "Kirjautuminen epäonnistui",
+        "logout": "Kirjautua sisään",
         "mainheading": "MythTV taustaohjelma",
         "show": "Näytä ylin banneri",
         "switchServer": "Vaihda palvelinta",
         "switchTheme": "Vaihda teemaa",
         "testbed": "Testbed",
-        "tvGuide": "tv-opas"
+        "tvGuide": "tv-opas",
+        "username": "Käyttäjänimi",
+        "userpassword": "Salasana",
+        "users": {
+            "new_password": "Uusi salasana",
+            "new_password2": "Uusi salasana uudelleen",
+            "old_password": "Nykyinen salasana"
+        }
     },
     "primeng": {
         "accept": "Joo",
@@ -1084,8 +1117,18 @@
             "title": "EIT-skanneriasetukset"
         },
         "epgdownload": {
+            "args_desc": "Kaikki argumentit, jotka haluat välittää opastieto -ohjelmaan.",
+            "args_label": "Opastietoväitteet",
             "enabled_desc": "Jos tämä on käytössä, opastietoohjelma suoritetaan automaattisesti.",
             "enabled_label": "Päivitä ohjelmaluettelot automaattisesti",
+            "maxhr_desc": "Tämä asetus ja edeltävä määrittelevät ajanjakson, jolloin opastieto -ohjelman sallitaan suorittaa. Esimerkiksi aloittamisen asettaminen 11: een ja päättyy 13: een tarkoittaisi, että ohjelma olisi vain klo 11.00–13.59.",
+            "maxhr_label": "Guide Data -ohjelman suorittaminen loppu",
+            "minhr_desc": "Tämä asetus ja seuraava määrittelevät ajanjakson, jolloin opastieto -ohjelman sallitaan suorittaa. Esimerkiksi aloittamisen asettaminen 11: een ja päättyy 13: een tarkoittaisi, että ohjelma olisi vain klo 11.00–13.59.",
+            "minhr_label": "Guide Data Program Suorituskäyttö",
+            "path_desc": "Käytä 'MythfillDatabase' tai mukautetun komentosarjan nimeä, joka asuu kaikkien videolähteidesi ohjelma -opastiedot.",
+            "path_label": "Opastieto -ohjelma",
+            "suggest_desc": "Jos otetaan käyttöön, anna opastietojen tarjoajan määrittää seuraava latausaika, jotta ne voidaan jakaa palvelimiinsa. Opas data -ohjelman suorituksen aloitus-/päätysajat jätetään myös huomiotta.",
+            "suggest_label": "Suorita opastieto -ohjelma Grabberin ehdottamassa ajankohtana",
             "title": "Ohjelman aikataulun latausasetukset"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "Sinulla on tietokanta '{{Name}}'",
             "havenotdb": "Sinulla ei ole '{{Name}}'-tietokantaa",
-            "schemaver": "Tietokantaskeeman versio on {{SchemaVersion}}"
+            "schemaver": "Tietokantaskeeman versio on {{SchemaVersion}}",
+            "servertype_head": "SQL -palvelintyyppi:"
         },
         "done": "Tehty",
         "enterDBLoginDetails": "Anna tietokantaan kirjautumistiedot",

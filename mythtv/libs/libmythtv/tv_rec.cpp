@@ -987,20 +987,17 @@ void TVRec::FinishedRecording(RecordingInfo *curRec, RecordingQuality *recq)
     curRec->FinishedRecording(!is_good || (recgrp == "LiveTV"));
 
     // send out UPDATE_RECORDING_STATUS message
-    if (recgrp != "LiveTV")
-    {
-        LOG(VB_RECORD, LOG_INFO, LOC +
-            QString("FinishedRecording -- UPDATE_RECORDING_STATUS: %1")
-            .arg(RecStatus::toString(is_good ? curRec->GetRecordingStatus()
-                          : RecStatus::Failed, kSingleRecord)));
-        MythEvent me(QString("UPDATE_RECORDING_STATUS %1 %2 %3 %4 %5")
-                     .arg(curRec->GetInputID())
-                     .arg(curRec->GetChanID())
-                     .arg(curRec->GetScheduledStartTime(MythDate::ISODate))
-                     .arg(is_good ? curRec->GetRecordingStatus() : RecStatus::Failed)
-                     .arg(curRec->GetRecordingEndTime(MythDate::ISODate)));
-        gCoreContext->dispatch(me);
-    }
+    LOG(VB_RECORD, LOG_INFO, LOC +
+        QString("FinishedRecording -- UPDATE_RECORDING_STATUS: %1")
+        .arg(RecStatus::toString(is_good ? curRec->GetRecordingStatus()
+                      : RecStatus::Failed, kSingleRecord)));
+    MythEvent me(QString("UPDATE_RECORDING_STATUS %1 %2 %3 %4 %5")
+                 .arg(curRec->GetInputID())
+                 .arg(curRec->GetChanID())
+                 .arg(curRec->GetScheduledStartTime(MythDate::ISODate))
+                 .arg(is_good ? curRec->GetRecordingStatus() : RecStatus::Failed)
+                 .arg(curRec->GetRecordingEndTime(MythDate::ISODate)));
+    gCoreContext->dispatch(me);
 
     // send out REC_FINISHED message
     SendMythSystemRecEvent("REC_FINISHED", curRec);
@@ -1009,8 +1006,8 @@ void TVRec::FinishedRecording(RecordingInfo *curRec, RecordingQuality *recq)
     auto secsSince = MythDate::secsInPast(curRec->GetRecordingStartTime());
     QString message = QString("DONE_RECORDING %1 %2 %3")
         .arg(m_inputId).arg(secsSince.count()).arg(GetFramesWritten());
-    MythEvent me(message);
-    gCoreContext->dispatch(me);
+    MythEvent me2(message);
+    gCoreContext->dispatch(me2);
 
     // Handle JobQueue
     QHash<QString,int>::iterator autoJob =
@@ -4227,27 +4224,14 @@ QString TVRec::LoadProfile(void *tvchain, RecordingInfo *rec,
     return profileName;
 }
 
-/** \fn TVRec::TuningNewRecorder(MPEGStreamData*)
- *  \brief Creates a recorder instance.
+/** \fn TVRec::TuningNewRecorderReal(MPEGStreamData*)
+ *  \brief Helper function for TVRec::TuningNewRecorder.
  */
-void TVRec::TuningNewRecorder(MPEGStreamData *streamData)
+bool TVRec::TuningNewRecorderReal(MPEGStreamData *streamData,
+                                  RecordingInfo **rec,
+                                  RecordingProfile& profile,
+                                  bool had_dummyrec)
 {
-    LOG(VB_RECORD, LOG_INFO, LOC + "Starting Recorder");
-
-    bool had_dummyrec = false;
-    if (HasFlags(kFlagDummyRecorderRunning))
-    {
-        FinishedRecording(m_curRecording, nullptr);
-        ClearFlags(kFlagDummyRecorderRunning, __FILE__, __LINE__);
-        m_curRecording->MarkAsInUse(false, kRecorderInUseID);
-        had_dummyrec = true;
-    }
-
-    RecordingInfo *rec = m_lastTuningRequest.m_program;
-
-    RecordingProfile profile;
-    m_recProfileName = LoadProfile(m_tvChain, rec, profile);
-
     if (m_tvChain)
     {
         bool ok = false;
@@ -4264,25 +4248,26 @@ void TVRec::TuningNewRecorder(MPEGStreamData *streamData)
         if (!ok)
         {
             LOG(VB_GENERAL, LOG_ERR, LOC + "Failed to create RingBuffer 2");
-            goto err_ret;
+            return false;
         }
-        rec = m_curRecording;  // new'd in Create/SwitchLiveTVRingBuffer()
+        *rec = m_curRecording;  // new'd in Create/SwitchLiveTVRingBuffer()
     }
 
     if (m_lastTuningRequest.m_flags & kFlagRecording)
     {
         bool write = m_genOpt.m_inputType != "IMPORT";
+        QString pathname = (*rec)->GetPathname();
         LOG(VB_GENERAL, LOG_INFO, LOC + QString("rec->GetPathname(): '%1'")
-                .arg(rec->GetPathname()));
-        SetRingBuffer(MythMediaBuffer::Create(rec->GetPathname(), write));
+                .arg(pathname));
+        SetRingBuffer(MythMediaBuffer::Create(pathname, write));
         if (!m_buffer->IsOpen() && write)
         {
             LOG(VB_GENERAL, LOG_ERR, LOC +
                 QString("RingBuffer '%1' not open...")
-                    .arg(rec->GetPathname()));
+                    .arg(pathname));
             SetRingBuffer(nullptr);
             ClearFlags(kFlagPendingActions, __FILE__, __LINE__);
-            goto err_ret;
+            return false;
         }
     }
 
@@ -4299,7 +4284,7 @@ void TVRec::TuningNewRecorder(MPEGStreamData *streamData)
             MythEvent me(message);
             gCoreContext->dispatch(me);
         }
-        goto err_ret;
+        return false;
     }
 
     if (m_channel && m_genOpt.m_inputType == "MJPEG")
@@ -4335,12 +4320,12 @@ void TVRec::TuningNewRecorder(MPEGStreamData *streamData)
         }
         TeardownRecorder(kFlagKillRec);
         if (m_tvChain)
-            rec = nullptr;
-        goto err_ret;
+            (*rec) = nullptr;
+        return false;
     }
 
-    if (rec)
-        m_recorder->SetRecording(rec);
+    if (*rec)
+        m_recorder->SetRecording(*rec);
 
     if (GetDTVRecorder() && streamData)
     {
@@ -4391,9 +4376,34 @@ void TVRec::TuningNewRecorder(MPEGStreamData *streamData)
         if (m_curRecording)
             m_curRecording->SetRecordingStatus(RecStatus::Recording);
     }
-    return;
 
-  err_ret:
+    return true;
+}
+
+/** \fn TVRec::TuningNewRecorder(MPEGStreamData*)
+ *  \brief Creates a recorder instance.
+ */
+void TVRec::TuningNewRecorder(MPEGStreamData *streamData)
+{
+    LOG(VB_RECORD, LOG_INFO, LOC + "Starting Recorder");
+
+    bool had_dummyrec = false;
+    if (HasFlags(kFlagDummyRecorderRunning))
+    {
+        FinishedRecording(m_curRecording, nullptr);
+        ClearFlags(kFlagDummyRecorderRunning, __FILE__, __LINE__);
+        m_curRecording->MarkAsInUse(false, kRecorderInUseID);
+        had_dummyrec = true;
+    }
+
+    RecordingInfo *rec = m_lastTuningRequest.m_program;
+
+    RecordingProfile profile;
+    m_recProfileName = LoadProfile(m_tvChain, rec, profile);
+
+    if (TuningNewRecorderReal(streamData, &rec, profile, had_dummyrec))
+        return;
+
     SetRecordingStatus(RecStatus::Failed, __LINE__, true);
     ChangeState(kState_None);
 

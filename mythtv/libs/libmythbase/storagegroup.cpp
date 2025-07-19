@@ -6,7 +6,7 @@
 #include "mythcorecontext.h"
 #include "mythdb.h"
 #include "mythlogging.h"
-#include "mythcoreutil.h"
+#include "filesysteminfo.h"
 #include "mythdirs.h"
 
 #define LOC QString("SG(%1): ").arg(m_groupname)
@@ -558,25 +558,21 @@ bool StorageGroup::FindDirs(const QString &group, const QString &hostname,
 
     if (!query.exec() || !query.isActive())
         MythDB::DBError("StorageGroup::StorageGroup()", query);
-    else if (query.next())
-    {
-        do
-        {
-            /* The storagegroup.dirname column uses utf8_bin collation, so Qt
-             * uses QString::fromLatin1() for toString(). Explicitly convert the
-             * value using QString::fromUtf8() to prevent corruption. */
-            dirname = QString::fromUtf8(query.value(0)
-                                        .toByteArray().constData());
-            dirname = dirname.trimmed();
-            if (dirname.endsWith("/"))
-                dirname.remove(dirname.length() - 1, 1);
 
-            if (dirlist)
-                (*dirlist) << dirname;
-            else
-                return true;
-        }
-        while (query.next());
+    while (query.next())
+    {
+        /* The storagegroup.dirname column uses utf8_bin collation, so Qt
+         * uses QString::fromLatin1() for toString(). Explicitly convert the
+         * value using QString::fromUtf8() to prevent corruption. */
+        dirname = QString::fromUtf8(query.value(0)
+                                    .toByteArray().constData());
+        dirname = dirname.trimmed();
+        if (dirname.endsWith("/"))
+            dirname.remove(dirname.length() - 1, 1);
+
+        if (nullptr == dirlist)
+            return true;
+        (*dirlist) << dirname;
         found = true;
     }
 
@@ -667,44 +663,31 @@ QString StorageGroup::FindNextDirMostFree(void)
 {
     QString nextDir;
     int64_t nextDirFree = 0;
-    int64_t thisDirTotal = 0;
-    int64_t thisDirUsed = 0;
-    int64_t thisDirFree = 0;
 
     LOG(VB_FILE, LOG_DEBUG, LOC + QString("FindNextDirMostFree: Starting"));
 
     if (m_allowFallback)
         nextDir = kDefaultStorageDir;
 
-    if (!m_dirlist.empty())
-        nextDir = m_dirlist[0];
-
-    QDir checkDir("");
-    int curDir = 0;
-    while (curDir < m_dirlist.size())
+    for (const auto & dir : m_dirlist)
     {
-        checkDir.setPath(m_dirlist[curDir]);
-        if (!checkDir.exists())
+        if (!QDir(dir).exists())
         {
             LOG(VB_GENERAL, LOG_ERR, LOC +
-                QString("FindNextDirMostFree: '%1' does not exist!")
-                    .arg(m_dirlist[curDir]));
-            curDir++;
+                QString("FindNextDirMostFree: '%1' does not exist!").arg(dir));
             continue;
         }
 
-        thisDirFree = getDiskSpace(m_dirlist[curDir], thisDirTotal,
-                                   thisDirUsed);
+        int64_t thisDirFree = FileSystemInfo(QString(), dir).getFreeSpace();
         LOG(VB_FILE, LOG_DEBUG, LOC +
             QString("FindNextDirMostFree: '%1' has %2 KiB free")
-                .arg(m_dirlist[curDir], QString::number(thisDirFree)));
+                .arg(dir, QString::number(thisDirFree)));
 
         if (thisDirFree > nextDirFree)
         {
-            nextDir     = m_dirlist[curDir];
+            nextDir     = dir;
             nextDirFree = thisDirFree;
         }
-        curDir++;
     }
 
     if (nextDir.isEmpty())

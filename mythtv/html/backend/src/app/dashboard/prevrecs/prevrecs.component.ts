@@ -1,9 +1,8 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService, SortMeta } from 'primeng/api';
 import { Menu } from 'primeng/menu';
 import { Table, TableLazyLoadEvent } from 'primeng/table';
-import { timeout } from 'rxjs';
 import { ScheduleLink } from 'src/app/schedule/schedule.component';
 import { DvrService } from 'src/app/services/dvr.service';
 import { GetOldRecordedListRequest, RemoveOldRecordedRequest, UpdateOldRecordedRequest } from 'src/app/services/interfaces/dvr.interface';
@@ -35,12 +34,14 @@ export class PrevrecsComponent implements OnInit {
   virtualScrollItemSize = 0;
   inter: ScheduleLink = { summaryComponent: this };
   searchValue = '';
+  subSearchValue = '';
   minDate: Date = new Date();
   minSet = false;
   maxDate: Date = new Date();
   dateValue?: Date | null;
   loadLast = 0;
-
+  sortField = 'StartTime';
+  sortOrder = 1;
 
   msg = {
     Success: 'common.success',
@@ -69,6 +70,7 @@ export class PrevrecsComponent implements OnInit {
         Object.defineProperty(this.msg, key, { value: data });
       });
     }
+
     const mnu_entries = [this.mnu_delete, this.mnu_rerec, this.mnu_norec];
     mnu_entries.forEach(entry => {
       if (entry.label)
@@ -76,12 +78,28 @@ export class PrevrecsComponent implements OnInit {
           entry.label = data
         );
     });
+
+    let sortField = this.utility.sortStorage.getItem('prevrecs.sortField');
+    if (sortField)
+      this.sortField = sortField;
+
+    let sortOrder = this.utility.sortStorage.getItem('prevrecs.sortOrder');
+    if (sortOrder)
+      this.sortOrder = Number(sortOrder);
   }
 
   ngOnInit(): void {
     // Initial Load
     this.loadLazy({ first: 0, rows: 1 });
   }
+
+  onSort(sortMeta: SortMeta) {
+    this.sortField = sortMeta.field;
+    this.sortOrder = sortMeta.order;
+    this.utility.sortStorage.setItem("prevrecs.sortField", sortMeta.field);
+    this.utility.sortStorage.setItem('prevrecs.sortOrder', sortMeta.order.toString());
+  }
+
 
   reload() {
     this.showTable = false;
@@ -97,7 +115,12 @@ export class PrevrecsComponent implements OnInit {
     this.selection = [];
     this.menu.hide();
     this.refreshing = true;
-    this.loadLazy(this.lazyLoadEvent!, true);
+    if (this.lazyLoadEvent!.last! > 15)
+      this.loadLazy(this.lazyLoadEvent!, true);
+    else
+    // If there are only a few rows do a full reload because the size
+    // may have changed and the loadlazy will not increase the size.
+      this.reload();
   }
 
   loadLazy(event: TableLazyLoadEvent, doRefresh?: boolean) {
@@ -139,7 +162,9 @@ export class PrevrecsComponent implements OnInit {
       request.EndTime = endTime.toISOString();
     }
     request.TitleRegex = this.searchValue;
-    let sortField = '';
+    request.SubtitleRegex = this.subSearchValue;
+
+    let sortField = this.sortField;
     if (Array.isArray(event.sortField))
       sortField = event.sortField[0];
     else if (event.sortField)
@@ -159,11 +184,11 @@ export class PrevrecsComponent implements OnInit {
         this.minSet = true;
       }
       // populate page of virtual programs
-      // note that Count is returned as the count requested, even
-      // if less items are returned because you hit the end.
-      // Maybe we should use recordings.Programs.length
-      this.programs.splice(recordings.StartIndex, recordings.Count,
-        ...recordings.Programs);
+      if (recordings.Count == 0 && recordings.StartIndex == 0)
+        this.programs = [];
+      else
+        this.programs.splice(recordings.StartIndex, recordings.Count,
+          ...recordings.Programs);
       // notify of change
       this.programs = [...this.programs]
       this.refreshing = false;
@@ -239,6 +264,11 @@ export class PrevrecsComponent implements OnInit {
     this.reload();
   }
 
+  resetSubSearch() {
+    this.subSearchValue = '';
+    this.reload();
+  }
+
   onFilter() {
     this.reload();
   }
@@ -285,10 +315,10 @@ export class PrevrecsComponent implements OnInit {
   }
 
   deleteRequest(event: any) {
-    let header : string;
+    let header: string;
     if (this.actionList.length > 1)
       header = this.msg.DeleteSelected.replace(/{{ *num *}}/, this.actionList.length.toString());
-    else if (this.actionList.length == 1){
+    else if (this.actionList.length == 1) {
       let program = this.actionList[0];
       header = program.Title + ': ' + program.SubTitle;
     }
@@ -311,7 +341,7 @@ export class PrevrecsComponent implements OnInit {
     if (program) {
       let param: RemoveOldRecordedRequest = {
         Chanid: program.Channel.ChanId,
-        StartTime:  new Date(program.StartTime),
+        StartTime: new Date(program.StartTime),
         Reschedule: this.actionList.length == 0
       };
       this.dvrService.RemoveOldRecorded(param).subscribe({
@@ -329,7 +359,7 @@ export class PrevrecsComponent implements OnInit {
       });
     }
     else {
-      setTimeout( () => this.refresh(), 1000 );
+      setTimeout(() => this.refresh(), 1000);
     }
   }
 
@@ -338,8 +368,8 @@ export class PrevrecsComponent implements OnInit {
     if (program) {
       let param: UpdateOldRecordedRequest = {
         Chanid: program.Channel.ChanId,
-        StartTime:  new Date(program.StartTime),
-        Duplicate: ! enable,
+        StartTime: new Date(program.StartTime),
+        Duplicate: !enable,
         Reschedule: this.actionList.length == 0
       };
       this.dvrService.UpdateOldRecorded(param).subscribe({
@@ -357,7 +387,7 @@ export class PrevrecsComponent implements OnInit {
       });
     }
     else {
-      setTimeout( () => this.refresh(), 1000 );
+      setTimeout(() => this.refresh(), 1000);
     }
   }
 

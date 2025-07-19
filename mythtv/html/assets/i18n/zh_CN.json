@@ -120,6 +120,7 @@
             "new_search": "新标题",
             "people_search": "人物搜索",
             "retgrid": "返回网格显示",
+            "subtitle_search": "字幕搜索",
             "title_search": "标题搜索",
             "typecolors": "类别 类型 颜色"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "更新元数据",
             "mnu_updaterecgrp": "更改录音组",
             "mnu_updaterecrule": "更新记录规则",
+            "never_rec": "永不记录",
             "nonrerec": "要允许重新录制损坏的程序，请使用“允许重新录制”。",
             "normal_rec": "正常记录",
             "orig_airdate": "原始播出日期",
@@ -317,6 +319,7 @@
             "inetref_desc": "使用 TheTVDB、TVmaze 或 TMDB 查找录制元数据。选择上面的单选按钮并使用链接搜索网站。在网页上找到正确的系列后，选择它并从 URL 复制数字 ID，如果是 thetvdb.com，则从网页复制数字 ID。在前缀 xxxx.py_ 之后的输入框中输入",
             "inetref_label": "元数据查找 ID (InetRef)",
             "input_any": "任意输入",
+            "invalid_never": "从不记录在这里无效",
             "isearch": "搜索",
             "maxeps_label": "保留的最大集数",
             "maxnewest_desc": "如果未选中，则在达到最大集数时停止录制。",
@@ -426,8 +429,27 @@
             "status": "地位",
             "time": "时间"
         },
+        "users": {
+            "auth_all_desc": "所有IP地址所需的身份验证",
+            "auth_desc": "这控制了未登录的用户是否可以访问API呼叫和Web应用程序页面。仅当您登录为管理员时，才能设置。仅当在后端设置中选择“允许从所有子网中允许连接”选项“允许从所有子网中允许连接”的选项，因为在后端设置中没有该选项，远程用户将无法访问系统。选择会立即更新，无需保存。请注意，即使不需要身份验证，用户仍然可以登录并通过选择身份验证。",
+            "auth_label": "需要API认证",
+            "auth_none_desc": "无需认证",
+            "auth_remote_desc": "远程IP地址所需的身份验证",
+            "auth_title": "启用或禁用身份验证",
+            "authreq_fail": "错误：无法设置此值。",
+            "delete_details": "这将删除用户{{ Name }}。",
+            "delete_label": "删除用户",
+            "edit_label": "更新用户",
+            "heading": "用户",
+            "name_label": "用户名",
+            "new": "新用户",
+            "oldpwwrong": "当前密码不正确。",
+            "pwdiffer": "密码不同"
+        },
         "videos": {
             "adddate": "添加日期",
+            "allCategories": "所有类别",
+            "category": "类别",
             "download": "下载视频",
             "heading": "视频",
             "releasedate": "发布日期",
@@ -471,13 +493,24 @@
         "changeLanguage": "改变语言",
         "dashboard": "仪表板",
         "hide": "隐藏顶部横幅",
+        "keep_pwd_warn": "警告：“留下来登录”将在浏览器本地存储中将密码存储在清晰的文本中。",
+        "keeplogin": "在这台计算机上登录。",
         "login": "登录",
+        "loginfail": "登录失败",
+        "logout": "注销",
         "mainheading": "神话电视后端",
         "show": "显示顶部横幅",
         "switchServer": "切换服务器",
         "switchTheme": "切换主题",
         "testbed": "试验台",
-        "tvGuide": "节目表"
+        "tvGuide": "节目表",
+        "username": "用户名",
+        "userpassword": "密码",
+        "users": {
+            "new_password": "新密码",
+            "new_password2": "再次新密码",
+            "old_password": "当前密码"
+        }
     },
     "primeng": {
         "accept": "是的",
@@ -1084,8 +1117,18 @@
             "title": "EIT 扫描仪选项"
         },
         "epgdownload": {
+            "args_desc": "您想要的任何参数传递给指南数据程序。",
+            "args_label": "指南数据参数",
             "enabled_desc": "如果启用，指南数据程序将自动运行。",
             "enabled_label": "自动更新节目列表",
+            "maxhr_desc": "此设置和前面的设置定义了允许运行指南数据程序的时间段。例如，设置开始到11，结束至13，这意味着该程序仅在上午11:00至1:59 PM之间运行。",
+            "maxhr_label": "指南数据程序执行结束",
+            "minhr_desc": "此设置和以下设置定义了允许运行指南数据程序的时间段。例如，设置开始到11，结束至13，这意味着该程序仅在上午11:00至1:59 PM之间运行。",
+            "minhr_label": "指南数据程序执行开始",
+            "path_desc": "使用“ mythfilldatabase”或自定义脚本的名称，该脚本将填充所有视频源的程序指南信息。",
+            "path_label": "指南数据程序",
+            "suggest_desc": "如果启用，请允许指南数据提供商指定下一个下载时间，以便在其服务器上分配负载。指南数据程序执行也被忽略了。",
+            "suggest_label": "在Grabber建议的时间运行指南数据程序",
             "title": "节目表下载选项"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "拥有“{{Name}}”数据库",
             "havenotdb": "没有“{{Name}}”数据库",
-            "schemaver": "数据库架构版本是 {{SchemaVersion}}"
+            "schemaver": "数据库架构版本是 {{SchemaVersion}}",
+            "servertype_head": "SQL Server类型："
         },
         "done": "完毕",
         "enterDBLoginDetails": "输入数据库登录详细信息",

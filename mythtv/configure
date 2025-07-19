@@ -13,7 +13,7 @@
 MYTHTV_VERSION_MAJMIN="36.0"
 MYTHTV_LIBVERSION="36"
 # See mythtv/libs/libmythbase/mythversion.h.in
-MYTHTV_BINARY_VERSION="36.20220913-1"
+MYTHTV_BINARY_VERSION="36.20250212-1"
 # See bindings/python/MythTV/static.py.in
 MYTHTV_PYTHON_OWN_VERSION="(36,0,-1,0)"
 # See python/MythTV/services_api/send.py.in
@@ -1778,6 +1778,7 @@ MYTHTV_HAVE_LIST='
     stdint_h
     sync_file_range
     close_range
+    iomainport
 '
 
 MYTHTV_LIST='
@@ -5222,7 +5223,7 @@ fi
 
 antbin=""
 java_code_version=""
-if enabled bdjava; then
+if enabled bdjava && ! enabled system_libbluray; then
     enabled x86_64 && java_arch=amd64
     enabled x86_32 && java_arch=i386
     enabled arm    && java_arch=arm
@@ -5961,7 +5962,7 @@ fi
 
 if enabled libxml2 ; then
    if pkg-config --exists libxml-2.0 ; then
-        libxml2_path=`pkg-config --cflags-only-I libxml-2.0|sed -n "s/-I\([^ ]*\) *$/\1/p"`
+        libxml2_path=`pkg-config --cflags-only-I libxml-2.0|sed -n "s/-I\([^ ]*\) */\1/p"`
    else
         disable libxml2
    fi
@@ -5989,10 +5990,10 @@ if enabled x11; then
 fi
 
 if test $target_os = darwin; then
-    # So far, only OS X 10.4 has this as a non-private framework
     if test -d /System/Library/Frameworks/DiskArbitration.framework ; then
         darwin_da="yes"
     fi
+    check_lib iomainport IOKit/IOKitLib.h IOMainPort "-Wl,-framework,IOKit" && enable iomainport
 fi
 
 

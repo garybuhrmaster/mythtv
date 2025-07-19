@@ -120,6 +120,7 @@
             "new_search": "New Titles",
             "people_search": "People Search",
             "retgrid": "Return to Grid Display",
+            "subtitle_search": "Subtitle Search",
             "title_search": "Title Search",
             "typecolors": "Category Type Colors"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Update Metadata",
             "mnu_updaterecgrp": "Change Recording Group",
             "mnu_updaterecrule": "Update Record Rule",
+            "never_rec": "Never Record",
             "nonrerec": "To allow rerecord of the damaged program, please use Allow Rerecord.",
             "normal_rec": "Normal Record",
             "orig_airdate": "Orig Airdate",
@@ -317,6 +319,7 @@
             "inetref_desc": "Use TheTVDB, TVmaze or TMDB to look up recording metadata. Select a radio button above and use the link to search the web site. Once you find the correct series on the web page, select it and copy the numeric id from the URL, or from the web page in the case of thetvdb.com. Enter that in the input box immediately after the prefix xxxx.py_",
             "inetref_label": "Metadata Lookup Id (InetRef)",
             "input_any": "Any Input",
+            "invalid_never": "Never Record is not valid here",
             "isearch": "Search",
             "maxeps_label": "Maximum Number of Episodes to Keep",
             "maxnewest_desc": "If unchecked, stop recording when maximum episodes are reached.",
@@ -426,8 +429,27 @@
             "status": "Status",
             "time": "Time"
         },
+        "users": {
+            "auth_all_desc": "Authentication Required for All IP Addresses",
+            "auth_desc": "This controls whether a user who has not signed in can access the API calls and web app pages. This can only be set while you are logged in as admin. The option for Remote IP Addresses can only be selected if the option 'Allow Connections from all Subnets' is selected in Backend setup because without that option in backend setup, remote users cannot access the system. The selection is updated immediately, no save is required. Note that even if no authentication is required, a user can still log in and be authenticated if he chooses.",
+            "auth_label": "API Authentication Required",
+            "auth_none_desc": "No Authentication Required",
+            "auth_remote_desc": "Authentication Required for Remote IP Addresses",
+            "auth_title": "Enable or Disable Authentication",
+            "authreq_fail": "Error: Unable to set this value.",
+            "delete_details": "This will delete user {{ Name }}.",
+            "delete_label": "Delete User",
+            "edit_label": "Update User",
+            "heading": "Users",
+            "name_label": "User Name",
+            "new": "New User",
+            "oldpwwrong": "Current Password is Incorrect.",
+            "pwdiffer": "Passwords Differ"
+        },
         "videos": {
             "adddate": "Date Added",
+            "allCategories": "All Categories",
+            "category": "Category",
             "download": "Download Video",
             "heading": "Videos",
             "releasedate": "Release Date",
@@ -442,7 +464,7 @@
             "Conflict": "Conflict",
             "CurrentRecording": "Current Recording",
             "Default": "Default",
-            "DontRecord": "Dont Record",
+            "DontRecord": "Don't Record",
             "EarlierShowing": "Earlier Showing",
             "Failed": "Failed",
             "Failing": "Failing",
@@ -471,13 +493,24 @@
         "changeLanguage": "Change Language",
         "dashboard": "Dashboard",
         "hide": "Hide top Banner",
+        "keep_pwd_warn": "Warning: \"Stay Logged In\" will store the password in Clear Text in the browser local storage.",
+        "keeplogin": "Stay Logged In on this Computer.",
         "login": "Log In",
+        "loginfail": "Login Failed",
+        "logout": "Log Out",
         "mainheading": "MythTV Backend",
         "show": "Show top Banner",
         "switchServer": "Switch Server",
         "switchTheme": "Switch Theme",
         "testbed": "Testbed",
-        "tvGuide": "TV Guide"
+        "tvGuide": "TV Guide",
+        "username": "User Name",
+        "userpassword": "Password",
+        "users": {
+            "new_password": "New Password",
+            "new_password2": "New Password Again",
+            "old_password": "Current Password"
+        }
     },
     "primeng": {
         "accept": "Yes",
@@ -1084,8 +1117,18 @@
             "title": "EIT Scanner Options"
         },
         "epgdownload": {
+            "args_desc": "Any arguments you want passed to the guide data program.",
+            "args_label": "Guide data arguments",
             "enabled_desc": "If enabled, the guide data program will be run automatically.",
             "enabled_label": "Automatically update program listings",
+            "maxhr_desc": "This setting and the preceding one define a time period when the guide data program is allowed to run. For example, setting start to 11 and end to 13 would mean that the program would only run between 11:00 AM and 1:59 PM.",
+            "maxhr_label": "Guide data program execution end",
+            "minhr_desc": "This setting and the following one define a time period when the guide data program is allowed to run. For example, setting start to 11 and end to 13 would mean that the program would only run between 11:00 AM and 1:59 PM.",
+            "minhr_label": "Guide data program execution start",
+            "path_desc": "Use 'mythfilldatabase' or the name of a custom script that will populate the program guide info for all your video sources.",
+            "path_label": "Guide data program",
+            "suggest_desc": "If enabled, allow a guide data provider to specify the next download time in order to distribute load on their servers. Guide data program execution start/end times are also ignored.",
+            "suggest_label": "Run guide data program at time suggested by the grabber",
             "title": "Program Schedule Downloading Options"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "Have '{{Name}}' database",
             "havenotdb": "Do not have '{{Name}}' database",
-            "schemaver": "Database schema version is {{SchemaVersion}}"
+            "schemaver": "Database schema version is {{SchemaVersion}}",
+            "servertype_head": "Sql Server Type:"
         },
         "done": "Done",
         "enterDBLoginDetails": "Enter the database login details",

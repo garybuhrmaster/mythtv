@@ -120,6 +120,7 @@
             "new_search": "Novi naslovi",
             "people_search": "Iskanje ljudi",
             "retgrid": "Nazaj na prikaz mreže",
+            "subtitle_search": "Iskanje podnapisov",
             "title_search": "Iskanje po naslovu",
             "typecolors": "Vrsta kategorije Barve"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Posodobi metapodatke",
             "mnu_updaterecgrp": "Spremeni snemalno skupino",
             "mnu_updaterecrule": "Posodobi pravilo zapisa",
+            "never_rec": "Nikoli ne snema",
             "nonrerec": "Če želite omogočiti ponovno snemanje poškodovanega programa, uporabite možnost Dovoli ponovno snemanje.",
             "normal_rec": "Običajni zapis",
             "orig_airdate": "Prvotni datum predvajanja",
@@ -317,6 +319,7 @@
             "inetref_desc": "Za iskanje metapodatkov o snemanju uporabite TheTVDB, TVmaze ali TMDB. Izberite izbirni gumb zgoraj in uporabite povezavo za iskanje po spletnem mestu. Ko najdete pravilno serijo na spletni strani, jo izberite in kopirajte številčni ID iz URL-ja ali s spletne strani v primeru thetvdb.com. To vnesite v vnosno polje takoj za predpono xxxx.py_",
             "inetref_label": "ID iskanja metapodatkov (InetRef)",
             "input_any": "Kateri koli vnos",
+            "invalid_never": "Nikoli tukaj ni veljaven",
             "isearch": "Iskanje",
             "maxeps_label": "Največje število epizod, ki jih je treba obdržati",
             "maxnewest_desc": "Če ni potrjeno, ustavi snemanje, ko je doseženo največje število epizod.",
@@ -426,8 +429,27 @@
             "status": "Stanje",
             "time": "Čas"
         },
+        "users": {
+            "auth_all_desc": "Prijavnost, potrebna za vse IP naslove",
+            "auth_desc": "To nadzoruje, ali lahko uporabnik, ki se ni prijavil, dostopa do klicev API -ja in strani spletnih aplikacij. To je mogoče nastaviti le, ko ste prijavljeni kot skrbnik. Možnost za oddaljene IP naslove je mogoče izbrati le, če je v nastavitvi zaledkov izbrana možnost \"Dovoli povezave iz vseh podomrež\", ker brez te možnosti v nastavitvi zaledja, oddaljeni uporabniki ne morejo dostopati do sistema. Izbor se takoj posodablja, shranjevanje ni potrebno. Upoštevajte, da tudi, če ni potrebna overjanje, se lahko uporabnik še vedno prijavi in ​​overjen, če se izbere.",
+            "auth_label": "Potrebna je preverjanje pristnosti API -ja",
+            "auth_none_desc": "Ni potrebna preverjanje pristnosti",
+            "auth_remote_desc": "Preverjanje pristnosti, potrebne za oddaljene IP naslove",
+            "auth_title": "Omogoči ali onemogoči overjanje",
+            "authreq_fail": "Napaka: Te vrednosti ni mogoče nastaviti.",
+            "delete_details": "To bo izbrisalo uporabnika {{ Name }}.",
+            "delete_label": "Izbriši uporabnika",
+            "edit_label": "Posodobi uporabnika",
+            "heading": "Uporabniki",
+            "name_label": "Uporabniško ime",
+            "new": "Nov uporabnik",
+            "oldpwwrong": "Trenutno geslo je napačno.",
+            "pwdiffer": "Gesla se razlikujejo"
+        },
         "videos": {
             "adddate": "Dodan datum",
+            "allCategories": "Vse kategorije",
+            "category": "Kategorija",
             "download": "Prenesi video",
             "heading": "Videoposnetki",
             "releasedate": "Datum izdaje",
@@ -471,13 +493,24 @@
         "changeLanguage": "Spremeni jezik",
         "dashboard": "Nadzorna plošča",
         "hide": "Skrij zgornjo pasico",
+        "keep_pwd_warn": "OPOZORILO: \"Ostani v prijavi\" bo geslo shranil v jasno besedilo v lokalnem pomnilniku brskalnika.",
+        "keeplogin": "Ostanite prijavljeni v tem računalniku.",
         "login": "Vpiši se",
+        "loginfail": "Prijava ni uspela",
+        "logout": "Odjava se",
         "mainheading": "Zaledje MythTV",
         "show": "Prikaži zgornjo pasico",
         "switchServer": "Switch Server",
         "switchTheme": "Preklopi temo",
         "testbed": "Preizkušena",
-        "tvGuide": "TV vodnik"
+        "tvGuide": "TV vodnik",
+        "username": "Uporabniško ime",
+        "userpassword": "Geslo",
+        "users": {
+            "new_password": "Novo geslo",
+            "new_password2": "Spet novo geslo",
+            "old_password": "Trenutno geslo"
+        }
     },
     "primeng": {
         "accept": "ja",
@@ -1084,8 +1117,18 @@
             "title": "Možnosti skeniranja EIT"
         },
         "epgdownload": {
+            "args_desc": "Vse argumente, ki jih želite prenesti v podatkovni program Guide.",
+            "args_label": "Vodite podatkovni argumenti",
             "enabled_desc": "Če je omogočeno, se program vodniških podatkov zažene samodejno.",
             "enabled_label": "Samodejno posodobi sezname programov",
+            "maxhr_desc": "Ta nastavitev in predhodno določata časovno obdobje, ko je dovoljen za vodenje podatkovnega programa. Na primer, nastavitev se začne na 11 in konec do 13 bi pomenila, da bi program potekal le med 11:00 in 13:59.",
+            "maxhr_label": "Vodnik podatkovnega programa Izvedba programa",
+            "minhr_desc": "Ta nastavitev in naslednja določita časovno obdobje, ko se lahko zažene podatkovni program Guide. Na primer, nastavitev se začne na 11 in konec do 13 bi pomenila, da bi program potekal le med 11:00 in 13:59.",
+            "minhr_label": "Vodnik za izvajanje podatkovnega programa Začetek",
+            "path_desc": "Uporabite 'MythfillDatabase' ali ime skripta po meri, ki bo napolnila informacije o vodniku programa za vse vaše video vire.",
+            "path_label": "Vodnik podatkovnega programa",
+            "suggest_desc": "Če je omogočeno, dovolite ponudniku podatkov, da določi naslednji čas prenosa, da lahko razdeli obremenitev na svojih strežnikih. Vodnik za izvajanje podatkovnega programa Začetek/končni čas se ne upošteva.",
+            "suggest_label": "Zaženite podatkovni program v času, ki ga je predlagal Grabber",
             "title": "Možnosti prenosa urnika programa"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "Imeti bazo podatkov '{{Name}}'",
             "havenotdb": "Nima podatkovne zbirke '{{Name}}'",
-            "schemaver": "Različica sheme baze podatkov je {{SchemaVersion}}"
+            "schemaver": "Različica sheme baze podatkov je {{SchemaVersion}}",
+            "servertype_head": "Vrsta strežnika SQL:"
         },
         "done": "Končano",
         "enterDBLoginDetails": "Vnesite podatke za prijavo v bazo podatkov",

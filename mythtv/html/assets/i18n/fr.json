@@ -120,6 +120,7 @@
             "new_search": "Nouveaux titres",
             "people_search": "Recherche de personnes",
             "retgrid": "Revenir à l'affichage de la grille",
+            "subtitle_search": "Recherche de sous-titre",
             "title_search": "Recherche de titre",
             "typecolors": "Catégorie Type Couleurs"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Mettre à jour les métadonnées",
             "mnu_updaterecgrp": "Changer le groupe d'enregistrement",
             "mnu_updaterecrule": "Mettre à jour la règle d'enregistrement",
+            "never_rec": "Ne jamais enregistrer",
             "nonrerec": "Pour autoriser le réenregistrement du programme endommagé, veuillez utiliser Autoriser le réenregistrement.",
             "normal_rec": "Dossier normal",
             "orig_airdate": "Date de diffusion originale",
@@ -317,6 +319,7 @@
             "inetref_desc": "Utilisez TheTVDB, TVmaze ou TMDB pour rechercher les métadonnées d'enregistrement. Sélectionnez un bouton radio ci-dessus et utilisez le lien pour effectuer une recherche sur le site Web. Une fois que vous avez trouvé la série correcte sur la page Web, sélectionnez-la et copiez l'identifiant numérique à partir de l'URL ou de la page Web dans le cas de thetvdb.com. Entrez cela dans la zone de saisie immédiatement après le préfixe xxxx.py_",
             "inetref_label": "ID de recherche de métadonnées (InetRef)",
             "input_any": "Toute entrée",
+            "invalid_never": "Ne jamais enregistrer n'est pas valide ici",
             "isearch": "Recherche",
             "maxeps_label": "Nombre maximum d'épisodes à conserver",
             "maxnewest_desc": "Si décoché, arrêter l'enregistrement lorsque le nombre maximum d'épisodes est atteint.",
@@ -426,8 +429,27 @@
             "status": "Statut",
             "time": "Temps"
         },
+        "users": {
+            "auth_all_desc": "Authentification requise pour toutes les adresses IP",
+            "auth_desc": "Cela contrôle si un utilisateur qui n'a pas signé peut accéder aux appels API et aux pages d'applications Web. Cela ne peut être défini que pendant que vous êtes connecté en tant qu'administrateur. L'option pour les adresses IP distantes ne peut être sélectionnée que si l'option «Autoriser les connexions de tous les sous-réseaux» est sélectionnée dans la configuration du backend car sans cette option de configuration de backend, les utilisateurs distants ne peuvent pas accéder au système. La sélection est mise à jour immédiatement, aucune sauvegarde n'est requise. Notez que même si aucune authentification n'est requise, un utilisateur peut toujours se connecter et être authentifié s'il choisit.",
+            "auth_label": "Authentification de l'API requise",
+            "auth_none_desc": "Aucune authentification requise",
+            "auth_remote_desc": "Authentification requise pour les adresses IP distantes",
+            "auth_title": "Activer ou désactiver l'authentification",
+            "authreq_fail": "Erreur: Impossible de définir cette valeur.",
+            "delete_details": "Cela supprimera l'utilisateur {{ Name }}.",
+            "delete_label": "Supprimer l'utilisateur",
+            "edit_label": "Mettre à jour l'utilisateur",
+            "heading": "Utilisateurs",
+            "name_label": "Nom d'utilisateur",
+            "new": "Nouvel utilisateur",
+            "oldpwwrong": "Le mot de passe actuel est incorrect.",
+            "pwdiffer": "Les mots de passe diffèrent"
+        },
         "videos": {
             "adddate": "Date ajoutée",
+            "allCategories": "Toutes les catégories",
+            "category": "Catégorie",
             "download": "Télécharger la video",
             "heading": "Vidéos",
             "releasedate": "Date de sortie",
@@ -471,13 +493,24 @@
         "changeLanguage": "Changer de langue",
         "dashboard": "Tableau de bord",
         "hide": "Masquer la bannière supérieure",
+        "keep_pwd_warn": "AVERTISSEMENT: \"Restez connecté\" stockera le mot de passe en texte clair dans le stockage local du navigateur.",
+        "keeplogin": "Restez connecté sur cet ordinateur.",
         "login": "S'identifier",
+        "loginfail": "La connexion a échoué",
+        "logout": "Déconnecter",
         "mainheading": "Backend de MythTV",
         "show": "Afficher la bannière supérieure",
         "switchServer": "Changer de serveur",
         "switchTheme": "Changer de thème",
         "testbed": "Banc d'essai",
-        "tvGuide": "guide télévisé"
+        "tvGuide": "guide télévisé",
+        "username": "Nom d'utilisateur",
+        "userpassword": "Mot de passe",
+        "users": {
+            "new_password": "Nouveau mot de passe",
+            "new_password2": "Nouveau mot de passe à nouveau",
+            "old_password": "Mot de passe actuel"
+        }
     },
     "primeng": {
         "accept": "Oui",
@@ -1084,8 +1117,18 @@
             "title": "Options du scanneur EIT"
         },
         "epgdownload": {
+            "args_desc": "Tout argument que vous souhaitez transmettre au programme de données Guide.",
+            "args_label": "Guider les arguments de données",
             "enabled_desc": "S'il est activé, le programme de données de guidage sera exécuté automatiquement.",
             "enabled_label": "Mettre à jour automatiquement les listes de programmes",
+            "maxhr_desc": "Ce paramètre et celui précédent définissent une période de temps où le programme de données de guide est autorisé à s'exécuter. Par exemple, la définition du début à 11 et la fin à 13 signifierait que le programme ne fonctionnerait que de 11h00 et 13h59.",
+            "maxhr_label": "Guide Fin d'exécution du programme de données",
+            "minhr_desc": "Ce paramètre et celui suivant définissent une période de temps où le programme de données de guide est autorisé à s'exécuter. Par exemple, la définition du début à 11 et la fin à 13 signifierait que le programme ne fonctionnerait que de 11h00 et 13h59.",
+            "minhr_label": "Guide Exécution du programme de données",
+            "path_desc": "Utilisez «MythFillDatabase» ou le nom d'un script personnalisé qui remplira les informations de guide du programme pour toutes vos sources vidéo.",
+            "path_label": "Guide du programme de données",
+            "suggest_desc": "Si vous êtes activé, permettez à un fournisseur de données de guide de spécifier le temps de téléchargement suivant afin de distribuer un chargement sur leurs serveurs. Exécution du programme de données Guide Le début / fin des temps est également ignoré.",
+            "suggest_label": "Exécutez le programme de données de guide au temps suggéré par le Grabber",
             "title": "Options de téléchargement du programme"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "Avoir la base de données '{{Name}}'",
             "havenotdb": "Ne pas avoir la base de données '{{Name}}'",
-            "schemaver": "La version du schéma de la base de données est {{SchemaVersion}}"
+            "schemaver": "La version du schéma de la base de données est {{SchemaVersion}}",
+            "servertype_head": "Type de serveur SQL:"
         },
         "done": "Terminé",
         "enterDBLoginDetails": "Entrez les informations de connexion à la base de données",

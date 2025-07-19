@@ -612,6 +612,11 @@ static void getpixelline(eu8 ** data, int width, Png4File * picfile)
 static void makebitmap(eu8 * data, int w, int h, int top, int bot,
                        char * filename, eu8 palette[4][3])
 {
+    if (top < 0 || bot < 0)
+    {
+        printf("ERROR: invalid arguments to makebitmap");
+        return;
+    }
     eu8 * top_ibuf = data + top;
     eu8 * bot_ibuf = data + bot;
     Png4File picfile;
@@ -737,7 +742,7 @@ static void pxsubtitle(const char * supfile, FILE * ofh, eu8 palette[16][3],
                     while (1) 
                     {
                         eu8 * p = 0;
-                        eu8 cmd = boundstr_read(&bs, 1)[0];
+                        eu8 cmd = boundstr_read(&bs, 1)[0];//NOLINT(clang-analyzer-security.ArrayBound)
                         int xpalette = 0;
                         int colcon_length = 0;
                         switch (cmd) 
@@ -801,7 +806,7 @@ static void pxsubtitle(const char * supfile, FILE * ofh, eu8 palette[16][3],
                 {
                     if (lastendpts < endpts)
                     {
-                        pts = lastendpts + 2 * (1000 / 30) * 90;/*??? */
+                        pts = lastendpts + (2 * (1000 / 30) * 90);/*??? */
                         tmppts = pts;
                         if (delay_ms)
                             tmppts += delay_ms * 90;

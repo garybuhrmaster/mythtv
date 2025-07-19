@@ -120,6 +120,7 @@
             "new_search": "Nye titler",
             "people_search": "People Search",
             "retgrid": "Vend tilbage til gittervisning",
+            "subtitle_search": "Undertekstsøgning",
             "title_search": "Titelsøgning",
             "typecolors": "Kategori Type Farver"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Opdater metadata",
             "mnu_updaterecgrp": "Skift optagegruppe",
             "mnu_updaterecrule": "Opdater registreringsregel",
+            "never_rec": "Registrer aldrig",
             "nonrerec": "For at tillade genoptagelse af det beskadigede program, brug venligst Tillad genoptagelse.",
             "normal_rec": "Normal rekord",
             "orig_airdate": "Original luftdato",
@@ -317,6 +319,7 @@
             "inetref_desc": "Brug TheTVDB, TVmaze eller TMDB til at slå optagelsesmetadata op. Vælg en alternativknap ovenfor, og brug linket til at søge på webstedet. Når du har fundet den rigtige serie på websiden, skal du vælge den og kopiere det numeriske id fra URL'en eller fra websiden i tilfælde af thetvdb.com. Indtast det i indtastningsfeltet umiddelbart efter præfikset xxxx.py_",
             "inetref_label": "Metadata-opslags-id (InetRef)",
             "input_any": "Enhver input",
+            "invalid_never": "Registrer aldrig er gyldig her",
             "isearch": "Søg",
             "maxeps_label": "Maksimalt antal episoder at beholde",
             "maxnewest_desc": "Hvis det ikke er markeret, skal du stoppe optagelsen, når det maksimale antal episoder er nået.",
@@ -426,8 +429,27 @@
             "status": "Status",
             "time": "Tid"
         },
+        "users": {
+            "auth_all_desc": "Godkendelse krævet til alle IP -adresser",
+            "auth_desc": "Dette styrer, om en bruger, der ikke har logget ind, kan få adgang til API -opkald og webappsider. Dette kan kun indstilles, mens du er logget ind som admin. Valgmuligheden for eksterne IP -adresser kan kun vælges, hvis indstillingen 'tillader forbindelser fra alle undernet' er valgt i backend -opsætning, fordi uden denne mulighed i backend -opsætning kan eksterne brugere ikke få adgang til systemet. Valget opdateres med det samme, der kræves ingen gemte. Bemærk, at selvom der ikke kræves nogen godkendelse, kan en bruger stadig logge ind og godkendes, hvis han vælger det.",
+            "auth_label": "API -godkendelse kræves",
+            "auth_none_desc": "Ingen godkendelse kræves",
+            "auth_remote_desc": "Autentificering krævet til fjernt IP -adresser",
+            "auth_title": "Aktivér eller deaktiver godkendelse",
+            "authreq_fail": "Fejl: Kan ikke indstille denne værdi.",
+            "delete_details": "Dette sletter bruger {{ Name }}.",
+            "delete_label": "Slet bruger",
+            "edit_label": "Opdater bruger",
+            "heading": "Brugere",
+            "name_label": "Brugernavn",
+            "new": "Ny bruger",
+            "oldpwwrong": "Nuværende adgangskode er forkert.",
+            "pwdiffer": "Adgangskoder er forskellige"
+        },
         "videos": {
             "adddate": "Dato tilføjet",
+            "allCategories": "Alle kategorier",
+            "category": "Kategori",
             "download": "Download video",
             "heading": "Videoer",
             "releasedate": "Udgivelses dato",
@@ -471,13 +493,24 @@
         "changeLanguage": "Skift sprog",
         "dashboard": "instrumentbræt",
         "hide": "Skjul øverste banner",
+        "keep_pwd_warn": "ADVARSEL: \"Bliv logget ind\" vil gemme adgangskoden i klar tekst i browserens lokale lager.",
+        "keeplogin": "Bliv logget ind på denne computer.",
         "login": "Log på",
+        "loginfail": "Login mislykkedes",
+        "logout": "Log ud",
         "mainheading": "MythTV Backend",
         "show": "Vis øverste banner",
         "switchServer": "Skift server",
         "switchTheme": "Skift tema",
         "testbed": "Testbed",
-        "tvGuide": "TV Guide"
+        "tvGuide": "TV Guide",
+        "username": "Brugernavn",
+        "userpassword": "Adgangskode",
+        "users": {
+            "new_password": "Ny adgangskode",
+            "new_password2": "Ny adgangskode igen",
+            "old_password": "Nuværende adgangskode"
+        }
     },
     "primeng": {
         "accept": "Ja",
@@ -1084,8 +1117,18 @@
             "title": "EIT-scannerindstillinger"
         },
         "epgdownload": {
+            "args_desc": "Eventuelle argumenter, du vil have overført til Guide Data -programmet.",
+            "args_label": "Vejledning af dataargumenter",
             "enabled_desc": "Hvis det er aktiveret, køres guidedataprogrammet automatisk.",
             "enabled_label": "Opdater automatisk programoversigter",
+            "maxhr_desc": "Denne indstilling og den foregående definerer en tidsperiode, hvor guide -dataprogrammet får lov til at køre. For eksempel ville indstillingsstart til 11 og afslutte til 13 at betyde, at programmet kun ville køre mellem kl. 11.00 og 13.59.",
+            "maxhr_label": "Vejledning Data Program Execution End",
+            "minhr_desc": "Denne indstilling og den følgende definerer en tidsperiode, hvor guide -dataprogrammet får lov til at køre. For eksempel ville indstillingsstart til 11 og afslutte til 13 at betyde, at programmet kun ville køre mellem kl. 11.00 og 13.59.",
+            "minhr_label": "Guide Data Program Execution Start",
+            "path_desc": "Brug 'MythfillDatabase' eller navnet på et brugerdefineret script, der vil udfylde programvejledningen til alle dine videokilder.",
+            "path_label": "Vejledning af dataprogram",
+            "suggest_desc": "Hvis det er aktiveret, skal du tillade en guide -dataudbyder at specificere den næste downloadtid for at distribuere belastning på deres servere. Guide Data Program Execution Start/End Times ignoreres også.",
+            "suggest_label": "Kør guide -dataprogram til tiden foreslået af grabberen",
             "title": "Programplanlægningsindstillinger for download"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "Har '{{Name}}' database",
             "havenotdb": "Har ikke '{{Name}}'-database",
-            "schemaver": "Databaseskemaversionen er {{SchemaVersion}}"
+            "schemaver": "Databaseskemaversionen er {{SchemaVersion}}",
+            "servertype_head": "SQL Server Type:"
         },
         "done": "Færdig",
         "enterDBLoginDetails": "Indtast databasens loginoplysninger",

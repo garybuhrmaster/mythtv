@@ -29,8 +29,7 @@ static inline QString null_to_empty(const QString &str)
 RecordingRule::RecordingRule()
   : m_findtime(QTime::fromString("00:00:00", Qt::ISODate)),
     m_findid(QDate(1970, 1, 1).daysTo(MythDate::current().toLocalTime().date())
-             + 719528),
-    m_transcoder(RecordingProfile::kTranscoderAutodetect)
+             + 719528)
 {
     QDateTime dt = MythDate::current();
     m_enddate = m_startdate = dt.date();
@@ -921,11 +920,12 @@ bool RecordingRule::IsValid(QString &msg) const
         return false;
     }
 
-    if ((isNormal && (m_type == kDailyRecord || m_type == kWeeklyRecord)) ||
+    if (!isOverride &&
+        ((isNormal && (m_type == kDailyRecord || m_type == kWeeklyRecord)) ||
         (isSearch && (m_type != kDailyRecord && m_type != kWeeklyRecord &&
                       m_type != kOneRecord && m_type != kAllRecord)) ||
         (isManual && (m_type != kDailyRecord && m_type != kWeeklyRecord &&
-                      m_type != kSingleRecord && m_type != kAllRecord)))
+                      m_type != kSingleRecord && m_type != kAllRecord))))
     {
         msg = QString("Invalid recording type/search type.");
         return false;
@@ -993,7 +993,7 @@ bool RecordingRule::IsValid(QString &msg) const
         qint64 secsto = QDateTime(m_startdate, m_starttime, utc)
             .secsTo(QDateTime(m_enddate, m_endtime, utc));
 #endif
-        if (secsto <= 0 || secsto > (8 * 3600))
+        if (secsto <= 0 || secsto > (24 * 3600))
         {
             msg = QString("Invalid duration.");
             return false;

@@ -120,6 +120,7 @@
             "new_search": "Nowe tytuły",
             "people_search": "Ludzie szukają",
             "retgrid": "Powrót do wyświetlania siatki",
+            "subtitle_search": "Wyszukiwanie napisów",
             "title_search": "Wyszukiwanie tytułów",
             "typecolors": "Kategoria Typ Kolory"
         },
@@ -258,6 +259,7 @@
             "mnu_updatemeta": "Zaktualizuj metadane",
             "mnu_updaterecgrp": "Zmień grupę nagrań",
             "mnu_updaterecrule": "Zaktualizuj regułę rekordu",
+            "never_rec": "Nigdy nie rejestruj",
             "nonrerec": "Aby zezwolić na ponowne nagranie uszkodzonego programu, użyj opcji Zezwól na ponowne nagranie.",
             "normal_rec": "Normalny rekord",
             "orig_airdate": "Oryginalna data emisji",
@@ -317,6 +319,7 @@
             "inetref_desc": "Użyj TheTVDB, TVmaze lub TMDB, aby wyszukać metadane nagrania. Wybierz przycisk radiowy powyżej i użyj łącza, aby przeszukać witrynę internetową. Po znalezieniu odpowiedniego serialu na stronie internetowej wybierz go i skopiuj numeryczny identyfikator z adresu URL lub ze strony internetowej w przypadku thetvdb.com. Wpisz to w polu wejściowym bezpośrednio po prefiksie xxxx.py_",
             "inetref_label": "Identyfikator wyszukiwania metadanych (InetRef)",
             "input_any": "Dowolne dane wejściowe",
+            "invalid_never": "Nigdy nie jest tutaj nieprawidłowe",
             "isearch": "Szukaj",
             "maxeps_label": "Maksymalna liczba odcinków do zachowania",
             "maxnewest_desc": "Jeśli to pole nie jest zaznaczone, zatrzymaj nagrywanie po osiągnięciu maksymalnej liczby odcinków.",
@@ -426,8 +429,27 @@
             "status": "Status",
             "time": "Czas"
         },
+        "users": {
+            "auth_all_desc": "Uwierzytelnianie wymagane dla wszystkich adresów IP",
+            "auth_desc": "Kontroluje to, czy użytkownik, który nie zalogował się, może uzyskać dostęp do połączeń API i stron internetowych. Można to ustawić tylko podczas zalogowania się jako admin. Opcję zdalnych adresów IP można wybrać tylko wtedy, gdy opcja „Zezwalaj na połączenia ze wszystkich podsieci” jest wybrana w konfiguracji zaplecza, ponieważ bez tej opcji w konfiguracji zaplecza zdalnego użytkowników nie mogą uzyskać dostępu do systemu. Wybór jest aktualizowany natychmiast, nie jest wymagane zapisywanie. Pamiętaj, że nawet jeśli nie jest wymagane uwierzytelnianie, użytkownik może nadal logować się i być uwierzytelniony, jeśli wybierze.",
+            "auth_label": "Wymagane uwierzytelnianie API",
+            "auth_none_desc": "Bez uwierzytelnienia",
+            "auth_remote_desc": "Uwierzytelnianie wymagane dla zdalnych adresów IP",
+            "auth_title": "Włącz lub wyłącz uwierzytelnianie",
+            "authreq_fail": "Błąd: Nie można ustawić tej wartości.",
+            "delete_details": "To usunie użytkownika {{ Name }}.",
+            "delete_label": "Usuń użytkownika",
+            "edit_label": "Zaktualizuj użytkownika",
+            "heading": "Użytkownicy",
+            "name_label": "Nazwa użytkownika",
+            "new": "Nowy użytkownik",
+            "oldpwwrong": "Obecne hasło jest nieprawidłowe.",
+            "pwdiffer": "Hasła różnią się"
+        },
         "videos": {
             "adddate": "Dodano datę",
+            "allCategories": "Wszystkie kategorie",
+            "category": "Kategoria",
             "download": "Ściągnij wideo",
             "heading": "Filmy",
             "releasedate": "Data wydania",
@@ -471,13 +493,24 @@
         "changeLanguage": "Zmień język",
         "dashboard": "Panel",
         "hide": "Ukryj górny baner",
+        "keep_pwd_warn": "OSTRZEŻENIE: „Pozostań zalogowany” będzie przechowywać hasło w wyraźnym tekście w lokalnej pamięci przeglądarki.",
+        "keeplogin": "Pozostań zalogowany na tym komputerze.",
         "login": "Zaloguj sie",
+        "loginfail": "Logowanie nie powiodło się",
+        "logout": "Wyloguj się",
         "mainheading": "Zaplecze MythTV",
         "show": "Pokaż górny baner",
         "switchServer": "Zmień serwer",
         "switchTheme": "Przełącz motyw",
         "testbed": "Stanowisko testowe",
-        "tvGuide": "program telewizyjny"
+        "tvGuide": "program telewizyjny",
+        "username": "Nazwa użytkownika",
+        "userpassword": "Hasło",
+        "users": {
+            "new_password": "Nowe hasło",
+            "new_password2": "Znowu nowe hasło",
+            "old_password": "Bieżące hasło"
+        }
     },
     "primeng": {
         "accept": "Tak",
@@ -1084,8 +1117,18 @@
             "title": "Opcje skanera EIT"
         },
         "epgdownload": {
+            "args_desc": "Wszelkie argumenty, które chcesz przekazać do programu danych przewodnika.",
+            "args_label": "Przewodnik argumentów danych",
             "enabled_desc": "Jeśli ta opcja jest włączona, program danych przewodnika zostanie uruchomiony automatycznie.",
             "enabled_label": "Automatycznie aktualizuj listy programów",
+            "maxhr_desc": "To ustawienie i poprzednie określają okres, w którym program danych przewodnika może uruchomić. Na przykład ustawienie początkowe do 11 i zakończenie do 13 oznaczałoby, że program trwa tylko od 11:00 a 13:59.",
+            "maxhr_label": "Przewodnik programu danych Wykonanie",
+            "minhr_desc": "To ustawienie i następujące określają okres, w którym program danych przewodnika może uruchomić. Na przykład ustawienie początkowe do 11 i zakończenie do 13 oznaczałoby, że program trwa tylko od 11:00 a 13:59.",
+            "minhr_label": "Przewodnik program programu danych Start",
+            "path_desc": "Użyj „MythfillDatabase” lub nazwy niestandardowego skryptu, który wypełni informacje o przewodniku programu dla wszystkich źródeł wideo.",
+            "path_label": "Program danych przewodnika",
+            "suggest_desc": "Jeśli jest włączony, zezwól na dostawcę danych przewodnika na określony czas pobierania w celu rozpowszechniania obciążenia na ich serwerach. Przewodnik programu danych Wykonywanie czasów rozpoczęcia/zakończenia są również ignorowane.",
+            "suggest_label": "Uruchom program danych przewodnika w czasie sugerowanym przez Grabbera",
             "title": "Opcje pobierania harmonogramu programów"
         },
         "general": {
@@ -1492,7 +1535,8 @@
         "dbsetup": {
             "havedb": "Mieć bazę danych „{{Name}}”.",
             "havenotdb": "Nie masz bazy danych „{{Name}}”.",
-            "schemaver": "Wersja schematu bazy danych to {{SchemaVersion}}"
+            "schemaver": "Wersja schematu bazy danych to {{SchemaVersion}}",
+            "servertype_head": "SQL SERVET:"
         },
         "done": "Zrobione",
         "enterDBLoginDetails": "Wprowadź dane logowania do bazy danych",

@@ -35,6 +35,15 @@ readData(const QString& filename, float *mean, unsigned char *median, float *std
     if (fp == nullptr)
         return false;
 
+    // Automatically clean up file at function exit
+    auto close_fp = [&](FILE *fp2) {
+        if (fclose(fp2) == 0)
+            return;
+        LOG(VB_COMMFLAG, LOG_ERR, QString("Error closing %1: %2")
+            .arg(filename, strerror(errno)));
+    };
+    std::unique_ptr<FILE,decltype(close_fp)> cleanup { fp, close_fp };
+
     for (long long frameno = 0; frameno < nframes; frameno++)
     {
         int monochromaticval = 0;
@@ -53,7 +62,7 @@ readData(const QString& filename, float *mean, unsigned char *median, float *std
             LOG(VB_COMMFLAG, LOG_ERR,
                 QString("Not enough data in %1: frame %2")
                     .arg(filename).arg(frameno));
-            goto error;
+            return false;
         }
         if (monochromaticval < 0 || monochromaticval > 1 ||
                 medianval < 0 || (uint)medianval > UCHAR_MAX ||
@@ -62,7 +71,7 @@ readData(const QString& filename, float *mean, unsigned char *median, float *std
             LOG(VB_COMMFLAG, LOG_ERR,
                 QString("Data out of range in %1: frame %2")
                     .arg(filename).arg(frameno));
-            goto error;
+            return false;
         }
         for (uint & ctr : counter)
         {
@@ -71,14 +80,14 @@ readData(const QString& filename, float *mean, unsigned char *median, float *std
                 LOG(VB_COMMFLAG, LOG_ERR,
                     QString("Not enough data in %1: frame %2")
                         .arg(filename).arg(frameno));
-                goto error;
+                return false;
             }
             if (ctr > UCHAR_MAX)
             {
                 LOG(VB_COMMFLAG, LOG_ERR,
                     QString("Data out of range in %1: frame %2")
                         .arg(filename).arg(frameno));
-                goto error;
+                return false;
             }
         }
         mean[frameno] = meanval;
@@ -96,16 +105,7 @@ readData(const QString& filename, float *mean, unsigned char *median, float *std
          * convenience
          */
     }
-    if (fclose(fp))
-        LOG(VB_COMMFLAG, LOG_ERR, QString("Error closing %1: %2")
-                .arg(filename, strerror(errno)));
     return true;
-
-error:
-    if (fclose(fp))
-        LOG(VB_COMMFLAG, LOG_ERR, QString("Error closing %1: %2")
-                .arg(filename, strerror(errno)));
-    return false;
 }
 
 bool
@@ -215,6 +215,13 @@ HistogramAnalyzer::MythPlayerInited(MythPlayer *player, long long nframes)
     if (m_borderDetector->MythPlayerInited(player))
         return FrameAnalyzer::ANALYZE_FATAL;
 
+    // processFrame() sometimes returns frame numbers higher than
+    // m_player->GetTotalFrameCount().  Add extra space at the end
+    // of the arrays to handle this case.
+    LOG(VB_COMMFLAG, LOG_INFO,
+        QString("HistogramAnalyzer::MythPlayerInited nframes %1, allocating %2")
+            .arg(nframes).arg(nframes+128));
+    nframes += 128;
     m_mean = new float[nframes];
     m_median = new unsigned char[nframes];
     m_stddev = new float[nframes];
@@ -311,7 +318,13 @@ HistogramAnalyzer::analyzeFrame(const MythVideoFrame *frame, long long frameno)
 
     const AVFrame *pgm = m_pgmConverter->getImage(frame, frameno, &pgmwidth, &pgmheight);
     if (pgm == nullptr)
-        goto error;
+    {
+        LOG(VB_COMMFLAG, LOG_ERR,
+            QString("HistogramAnalyzer::analyzeFrame error at frame %1")
+                .arg(frameno));
+
+        return FrameAnalyzer::ANALYZE_ERROR;
+    }
 
     ismonochromatic = m_borderDetector->getDimensions(pgm, pgmheight, frameno,
             &croprow, &cropcol, &cropwidth, &cropheight) != 0;
@@ -339,10 +352,10 @@ HistogramAnalyzer::analyzeFrame(const MythVideoFrame *frame, long long frameno)
     rr3 = ROUNDUP(pgmheight, kRInc);
     cc3 = ROUNDUP(pgmwidth, kCInc);
 
-    borderpixels = (rr1 / kRInc) * (cc3 / kCInc) +        /* top */
-        ((rr2 - rr1) / kRInc) * (cc1 / kCInc) +           /* left */
-        ((rr2 - rr1) / kRInc) * ((cc3 - cc2) / kCInc) +   /* right */
-        ((rr3 - rr2) / kRInc) * (cc3 / kCInc);            /* bottom */
+    borderpixels = ((rr1 / kRInc) * (cc3 / kCInc)) +        /* top */
+        (((rr2 - rr1) / kRInc) * (cc1 / kCInc)) +           /* left */
+        (((rr2 - rr1) / kRInc) * ((cc3 - cc2) / kCInc)) +   /* right */
+        (((rr3 - rr2) / kRInc) * (cc3 / kCInc));            /* bottom */
 
     pp = &m_buf[borderpixels];
     m_histVal.fill(0);
@@ -388,7 +401,7 @@ HistogramAnalyzer::analyzeFrame(const MythVideoFrame *frame, long long frameno)
     memset(m_buf, bordercolor, borderpixels * sizeof(*m_buf));
     m_monochromatic[frameno] = ismonochromatic ? 1 : 0;
     m_mean[frameno] = (float)sumval / npixels;
-    m_median[frameno] = quick_select_median(m_buf, npixels);
+    m_median[frameno] = quick_select_median<uint8_t>(m_buf, npixels);
     m_stddev[frameno] = npixels > 1 ?
         sqrt((sumsquares - (float)sumval * sumval / npixels) / (npixels - 1)) :
             0;
@@ -399,13 +412,6 @@ HistogramAnalyzer::analyzeFrame(const MythVideoFrame *frame, long long frameno)
     m_lastFrameNo = frameno;
 
     return FrameAnalyzer::ANALYZE_OK;
-
-error:
-    LOG(VB_COMMFLAG, LOG_ERR,
-        QString("HistogramAnalyzer::analyzeFrame error at frame %1")
-            .arg(frameno));
-
-    return FrameAnalyzer::ANALYZE_ERROR;
 }
 
 int

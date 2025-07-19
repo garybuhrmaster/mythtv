@@ -38,6 +38,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+#include <memory>
 
 // External creation function.
 MHEG *MHCreateEngine(MHContext *context)
@@ -127,8 +128,11 @@ std::chrono::milliseconds MHEngine::RunAll()
 
     std::chrono::milliseconds nNextTime = 0ms;
 
-    do
+    bool at_least_once {true} ;
+    while (!m_eventQueue.isEmpty() || ! m_actionStack.isEmpty() || at_least_once)
     {
+        at_least_once = false;
+
         // Check to see if we need to close.
         if (m_context->CheckStop())
         {
@@ -178,7 +182,6 @@ std::chrono::milliseconds MHEngine::RunAll()
             delete pEvent;
         }
     }
-    while (! m_eventQueue.isEmpty() || ! m_actionStack.isEmpty());
 
     // Redraw the display if necessary.
     if (! m_redrawRegion.isEmpty())
@@ -204,49 +207,35 @@ MHGroup *MHEngine::ParseProgram(QByteArray &text)
     // or curly bracket.
     // This is only there for testing: all downloaded objects will be in ASN1
     unsigned char ch = text[0];
-    MHParseBase *parser = nullptr;
-    MHParseNode *pTree = nullptr;
-    MHGroup *pRes = nullptr;
+    std::unique_ptr<MHParseBase> parser;
+    std::unique_ptr<MHGroup> pRes;
 
     if (ch >= 128)
     {
-        parser = new MHParseBinary(text);
+        parser = std::make_unique<MHParseBinary>(text);
     }
     else
     {
-        parser = new MHParseText(text);
+        parser = std::make_unique<MHParseText>(text);
     }
 
-    try
+    // Parse the binary or text.
+    std::unique_ptr<MHParseNode> pTree ( parser->Parse() );
+
+    switch (pTree->GetTagNo())   // The parse node should be a tagged item.
     {
-        // Parse the binary or text.
-        pTree = parser->Parse();
-
-        switch (pTree->GetTagNo())   // The parse node should be a tagged item.
-        {
-            case C_APPLICATION:
-                pRes = new MHApplication;
-                break;
-            case C_SCENE:
-                pRes = new MHScene;
-                break;
-            default:
-                MHParseNode::Failure("Expected Application or Scene"); // throws exception.
-        }
-
-        pRes->Initialise(pTree, this); // Convert the parse tree.
-        delete(pTree);
-        delete(parser);
-    }
-    catch (...)
-    {
-        delete(parser);
-        delete(pTree);
-        delete(pRes);
-        throw;
+        case C_APPLICATION:
+            pRes = std::make_unique<MHApplication>();
+            break;
+        case C_SCENE:
+            pRes = std::make_unique<MHScene>();
+            break;
+        default:
+            MHParseNode::Failure("Expected Application or Scene"); // throws exception.
     }
 
-    return pRes;
+    pRes->Initialise(pTree.get(), this); // Convert the parse tree.
+    return pRes.release();
 }
 
 // Determine protocol for a file
@@ -641,8 +630,13 @@ void MHEngine::RunActions()
 
             pAction->Perform(this);
         }
-        catch (...)
+        catch(const std::exception& ex)
         {
+            MHLOG(MHLogDetail, QString("Action - threw %1").arg(ex.what()));
+        }
+        catch(...)
+        {
+            MHLOG(MHLogDetail, QString("Action - threw unknown"));
         }
     }
 }
@@ -880,6 +874,9 @@ void MHEngine::PutBehind(const MHRoot *p, const MHRoot *pRef)
 // transparency of items since items higher up the stack may be semi-transparent.
 void MHEngine::DrawRegion(const QRegion& toDraw, int nStackPos)
 {
+    MHApplication *pApp = CurrentApp();
+    if (nullptr == pApp)
+        return;
     if (toDraw.isEmpty())
     {
         return;    // Nothing left to draw.
@@ -887,7 +884,7 @@ void MHEngine::DrawRegion(const QRegion& toDraw, int nStackPos)
 
     while (nStackPos >= 0)
     {
-        MHVisible *pItem = CurrentApp()->m_displayStack.GetAt(nStackPos);
+        MHVisible *pItem = pApp->m_displayStack.GetAt(nStackPos);
         // Work out how much of the area we want to draw is included in this visible.
         // The visible area will be empty if the item is transparent or not active.
         QRegion drawArea = pItem->GetVisibleArea() & toDraw;
@@ -1032,8 +1029,14 @@ void MHEngine::RequestExternalContent(MHIngredient *pRequester)
                     reinterpret_cast< const unsigned char * >(text.constData()),
                     text.size(), this);
             }
-            catch (...)
-            {}
+            catch(const std::exception& ex)
+            {
+                MHLOG(MHLogDetail, QString("ExternalContent - threw %1").arg(ex.what()));
+            }
+            catch(...)
+            {
+                MHLOG(MHLogDetail, QString("ExternalContent - threw unknown"));
+            }
         }
         else
         {
@@ -1103,8 +1106,14 @@ void MHEngine::CheckContentRequests()
                         reinterpret_cast< const unsigned char * >(text.constData()),
                         text.size(), this);
                 }
-                catch (...)
-                {}
+                catch(const std::exception& ex)
+                {
+                    MHLOG(MHLogDetail, QString("ContentRequest - threw %1").arg(ex.what()));
+                }
+                catch(...)
+                {
+                    MHLOG(MHLogDetail, QString("ContentRequest - threw unknown"));
+                }
             }
             else
             {

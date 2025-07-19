@@ -207,6 +207,8 @@ void CDRipperThread::run(void)
     m_totalSectorsDone = 0;
     for (int trackno = 0; trackno < m_tracks->size(); trackno++)
     {
+        if (!m_tracks->at(trackno)->active)
+            continue;
         m_totalSectors += getSectorCount(m_cdDevice, trackno + 1);
     }
 
@@ -292,46 +294,46 @@ void CDRipperThread::run(void)
                 new RipStatusEvent(RipStatusEvent::kTrackPercentEvent, 0));
 
             // do we need to start a new file?
-            if (m_tracks->at(trackno)->active)
+            if (!m_tracks->at(trackno)->active)
+                continue;
+
+            titleTrack = track;
+            titleTrack->setLength(m_tracks->at(trackno)->length);
+
+            if (m_quality < 3)
             {
-                titleTrack = track;
-                titleTrack->setLength(m_tracks->at(trackno)->length);
-
-                if (m_quality < 3)
+                if (encodertype == "mp3")
                 {
-                    if (encodertype == "mp3")
-                    {
-                        outfile = QString("track%1.mp3").arg(trackno);
-                        encoder = std::make_unique<LameEncoder>(saveDir + outfile, m_quality,
-                                                      titleTrack, mp3usevbr);
-                    }
-                    else // ogg
-                    {
-                        outfile = QString("track%1.ogg").arg(trackno);
-                        encoder = std::make_unique<VorbisEncoder>(saveDir + outfile, m_quality,
-                                                        titleTrack);
-                    }
+                    outfile = QString("track%1.mp3").arg(trackno);
+                    encoder = std::make_unique<LameEncoder>(saveDir + outfile, m_quality,
+                                                  titleTrack, mp3usevbr);
                 }
-                else
+                else // ogg
                 {
-                    outfile = QString("track%1.flac").arg(trackno);
-                    encoder = std::make_unique<FlacEncoder>(saveDir + outfile, m_quality,
-                                                  titleTrack);
+                    outfile = QString("track%1.ogg").arg(trackno);
+                    encoder = std::make_unique<VorbisEncoder>(saveDir + outfile, m_quality,
+                                                    titleTrack);
                 }
+            }
+            else
+            {
+                outfile = QString("track%1.flac").arg(trackno);
+                encoder = std::make_unique<FlacEncoder>(saveDir + outfile, m_quality,
+                                              titleTrack);
+            }
 
-                if (!encoder->isValid())
-                {
-                    QApplication::postEvent(
-                        m_parent,
-                        new RipStatusEvent(
-                            RipStatusEvent::kEncoderErrorEvent,
-                            "Encoder failed to open file for writing"));
-                    LOG(VB_GENERAL, LOG_ERR, "MythMusic: Encoder failed"
-                                             " to open file for writing");
+            if (!encoder->isValid())
+            {
+                QApplication::postEvent(
+                    m_parent,
+                    new RipStatusEvent(
+                        RipStatusEvent::kEncoderErrorEvent,
+                        "Encoder failed to open file for writing"));
+                LOG(VB_GENERAL, LOG_ERR, "MythMusic: Encoder failed"
+                                         " to open file for writing");
 
-                    RunEpilog();
-                    return;
-                }
+                RunEpilog();
+                return;
             }
 
             if (!encoder)
@@ -353,28 +355,25 @@ void CDRipperThread::run(void)
                 return;
             }
 
-            if (m_tracks->at(trackno)->active)
-            {
-                QString ext = QFileInfo(outfile).suffix();
-                QString destFile = filenameFromMetadata(titleTrack) + '.' + ext;
-                QUrl url(m_musicStorageDir);
+            QString ext = QFileInfo(outfile).suffix();
+            QString destFile = filenameFromMetadata(titleTrack) + '.' + ext;
+            QUrl url(m_musicStorageDir);
 
-                // save the metadata to the DB
-                titleTrack->setFilename(destFile);
-                titleTrack->setHostname(url.host());
-                titleTrack->setFileSize((quint64)QFileInfo(outfile).size());
-                titleTrack->dumpToDatabase();
+            // save the metadata to the DB
+            titleTrack->setFilename(destFile);
+            titleTrack->setHostname(url.host());
+            titleTrack->setFileSize((quint64)QFileInfo(outfile).size());
+            titleTrack->dumpToDatabase();
 
-                // this will delete the encoder which will write the metadata in it's dtor
-                encoder.reset();
+            // this will delete the encoder which will write the metadata in it's dtor
+            encoder.reset();
 
-                // copy track to the BE
-                destFile = MythCoreContext::GenMythURL(url.host(), 0, destFile, "Music");
+            // copy track to the BE
+            destFile = MythCoreContext::GenMythURL(url.host(), 0, destFile, "Music");
 
-                QApplication::postEvent(m_parent, new RipStatusEvent(RipStatusEvent::kCopyStartEvent, 0));
-                RemoteFile::CopyFile(saveDir + outfile, destFile, true);
-                QApplication::postEvent(m_parent, new RipStatusEvent(RipStatusEvent::kCopyEndEvent, 0));
-            }
+            QApplication::postEvent(m_parent, new RipStatusEvent(RipStatusEvent::kCopyStartEvent, 0));
+            RemoteFile::CopyFile(saveDir + outfile, destFile, true);
+            QApplication::postEvent(m_parent, new RipStatusEvent(RipStatusEvent::kCopyEndEvent, 0));
         }
     }
 
@@ -763,7 +762,8 @@ void Ripper::ScanFinished()
         m_genreName.clear();
         m_year.clear();
 
-        for (int trackno = 0; trackno < m_decoder->getNumTracks(); trackno++)
+        int max_tracks = m_decoder->getNumTracks();
+        for (int trackno = 0; trackno < max_tracks; trackno++)
         {
             auto *ripTrack = new RipTrack;
 
@@ -911,7 +911,7 @@ bool Ripper::deleteExistingTrack(RipTrack *track)
 
         // delete file
         // FIXME: RemoteFile::DeleteFile will only work with files on the master BE
-        if (!RemoteFile::DeleteFile(filename))
+        if (RemoteFile::Exists(filename) && !RemoteFile::DeleteFile(filename))
         {
             LOG(VB_GENERAL, LOG_NOTICE, QString("Ripper::deleteExistingTrack() "
                                                 "Could not delete %1")

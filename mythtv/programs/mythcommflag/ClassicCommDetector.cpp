@@ -183,10 +183,6 @@ void ClassicCommDetector::Init()
     m_commDetectBorder =
         gCoreContext->GetNumSetting("CommDetectBorder", 20) * m_height / 720;
 
-#ifdef SHOW_DEBUG_WIN
-    comm_debug_init(m_width, m_height);
-#endif
-
     m_currentAspect = COMM_ASPECT_WIDE;
 
     m_lastFrameNumber = -2;
@@ -977,11 +973,6 @@ void ClassicCommDetector::ProcessFrame(MythVideoFrame *frame,
             .arg(m_frameInfo[m_curFrameNumber].aspect, 1)
             .arg(m_frameInfo[m_curFrameNumber].flagMask, 4, 16, QChar('0')));
     }
-
-#ifdef SHOW_DEBUG_WIN
-    comm_debug_show(frame->buf);
-    getchar();
-#endif
 
     m_framesProcessed++;
     delete[] rowMax;
@@ -1942,7 +1933,7 @@ void ClassicCommDetector::BuildBlankFrameCommList(void)
     // of show unless followed by another
     if ((commercials > 1) &&
         (c_end[0] < (33 * m_fps)) &&
-        (c_start[1] > (c_end[0] + 40 * m_fps)))
+        (c_start[1] > (c_end[0] + (40 * m_fps))))
         i = 1;
 
     // eliminate any blank frames at end of commercials

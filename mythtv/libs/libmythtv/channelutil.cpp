@@ -62,7 +62,7 @@ static uint get_dtv_multiplex(uint     db_source_id,  const QString& sistandard,
     {
         query.bindValue(":TRANSPORTID", transport_id);
         query.bindValue(":NETWORKID",   network_id);
-        query.bindValue(":POLARITY",    static_cast<uint>(polarity));
+        query.bindValue(":POLARITY",    QChar(static_cast<uint>(polarity)));
     }
 
     if (!query.exec() || !query.isActive())
@@ -102,7 +102,7 @@ static uint insert_dtv_multiplex(
         QString("dbid:%1 std:'%2' ").arg(db_source_id).arg(sistandard) +
         QString("freq:%1 mod:%2 ").arg(frequency).arg(modulation) +
         QString("tid:%1 nid:%2 ").arg(transport_id).arg(network_id) +
-        QString("pol:%1 msys:%2 ...)").arg(static_cast<uint>(polarity)).arg(mod_sys) +
+        QString("pol:%1 msys:%2 ...)").arg(QChar(static_cast<uint>(polarity))).arg(mod_sys) +
         QString("mplexid:%1").arg(mplex));
 
     bool isDVB = (sistandard.toLower() == "dvb");
@@ -208,7 +208,7 @@ static uint insert_dtv_multiplex(
         {
             query.bindValue(":TRANSPORTID",   transport_id);
             query.bindValue(":NETWORKID",     network_id);
-            query.bindValue(":WHEREPOLARITY", static_cast<uint>(polarity));
+            query.bindValue(":WHEREPOLARITY", QChar(static_cast<uint>(polarity)));
         }
         else
         {
@@ -1478,13 +1478,13 @@ int ChannelUtil::CreateChanID(uint sourceid, const QString &chan_num)
     if (chansep > 0)
     {
         chanid =
-            sourceid * 10000 +
-            chan_num.left(chansep).toInt() * 100 +
+            (sourceid * 10000) +
+            (chan_num.left(chansep).toInt() * 100) +
             chan_num.right(chan_num.length() - chansep - 1).toInt();
     }
     else
     {
-        chanid = sourceid * 10000 + chan_num.toInt();
+        chanid = (sourceid * 10000) + chan_num.toInt();
     }
 
     if ((chanid > sourceid * 10000) && (chanid_available(chanid)))
